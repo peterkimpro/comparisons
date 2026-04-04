@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nomfly Launch &amp; Monetization Strategy — Replacing Yummly</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0d1117;--card:#161b22;--border:#30363d;--text:#e6edf3;--dim:#8b949e;--accent:#f97316;--accent2:#22c55e;--danger:#ef4444;--info:#3b82f6;--purple:#a855f7}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;padding:0 16px 60px}
+.container{max-width:960px;margin:0 auto}
+h1{font-size:2rem;margin:32px 0 8px;text-align:center;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.subtitle{text-align:center;color:var(--dim);font-size:1rem;margin-bottom:32px}
+h2{font-size:1.4rem;margin:36px 0 16px;padding-bottom:8px;border-bottom:1px solid var(--border);color:var(--accent)}
+h3{font-size:1.1rem;margin:20px 0 10px;color:var(--accent2)}
+h4{font-size:1rem;margin:16px 0 8px;color:var(--purple)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin:16px 0}
+.card.highlight{border-color:var(--accent);box-shadow:0 0 20px rgba(249,115,22,0.15)}
+.card.green{border-color:var(--accent2);box-shadow:0 0 20px rgba(34,197,94,0.1)}
+.card.danger{border-color:var(--danger);box-shadow:0 0 12px rgba(239,68,68,0.1)}
+.card.info{border-color:var(--info);box-shadow:0 0 12px rgba(59,130,246,0.1)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.9rem}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border)}
+th{color:var(--accent);font-weight:600;white-space:nowrap}
+td{color:var(--text)}
+tr:hover td{background:rgba(249,115,22,0.04)}
+.tag{display:inline-block;padding:2px 10px;border-radius:12px;font-size:.75rem;font-weight:600;margin:2px}
+.tag-green{background:rgba(34,197,94,0.15);color:var(--accent2)}
+.tag-orange{background:rgba(249,115,22,0.15);color:var(--accent)}
+.tag-red{background:rgba(239,68,68,0.15);color:var(--danger)}
+.tag-blue{background:rgba(59,130,246,0.15);color:var(--info)}
+.tag-purple{background:rgba(168,85,247,0.15);color:var(--purple)}
+.timeline{position:relative;padding-left:28px;margin:16px 0}
+.timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--border)}
+.timeline-item{position:relative;margin-bottom:20px}
+.timeline-item::before{content:'';position:absolute;left:-24px;top:6px;width:12px;height:12px;border-radius:50%;border:2px solid var(--accent);background:var(--bg)}
+.timeline-item.active::before{background:var(--accent);box-shadow:0 0 8px var(--accent)}
+.timeline-item.future::before{border-color:var(--dim);background:var(--bg)}
+.phase-label{font-weight:700;color:var(--accent)}
+.verdict{font-size:1.1rem;font-weight:700;padding:16px;border-radius:8px;text-align:center;margin:16px 0}
+.verdict.go{background:rgba(34,197,94,0.12);color:var(--accent2);border:1px solid var(--accent2)}
+.verdict.caution{background:rgba(249,115,22,0.12);color:var(--accent);border:1px solid var(--accent)}
+.verdict.stop{background:rgba(239,68,68,0.12);color:var(--danger);border:1px solid var(--danger)}
+ul{margin:8px 0 8px 20px}
+li{margin:4px 0;color:var(--text)}
+li strong{color:var(--accent2)}
+.stat{display:inline-block;text-align:center;padding:12px 20px}
+.stat-num{font-size:2rem;font-weight:800;color:var(--accent)}
+.stat-label{font-size:.75rem;color:var(--dim);display:block}
+.stats-row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:16px 0}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+@media(max-width:640px){.compare-grid{grid-template-columns:1fr}.stats-row{flex-direction:column;align-items:center}}
+.pro{color:var(--accent2)}
+.con{color:var(--danger)}
+.nav{position:sticky;top:0;background:var(--bg);padding:12px 0;z-index:10;border-bottom:1px solid var(--border);margin-bottom:20px}
+.nav-links{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.nav-links a{color:var(--dim);text-decoration:none;font-size:.8rem;padding:4px 12px;border-radius:16px;border:1px solid var(--border);transition:all .2s}
+.nav-links a:hover{color:var(--accent);border-color:var(--accent)}
+blockquote{border-left:3px solid var(--accent);padding:8px 16px;margin:12px 0;color:var(--dim);font-style:italic}
+.bar{height:20px;border-radius:4px;margin:4px 0;display:flex;align-items:center;padding-left:8px;font-size:.7rem;font-weight:600;color:#fff}
+.bar-container{margin:6px 0}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Nomfly Launch &amp; Monetization Strategy</h1>
+<p class="subtitle">How to Replace Yummly &amp; Become the #1 Food App — April 2026</p>
+
+<nav class="nav">
+<div class="nav-links">
+<a href="#tldr">TL;DR</a>
+<a href="#yummly">Yummly Autopsy</a>
+<a href="#displaced">Displaced Users</a>
+<a href="#casestudies">Case Studies</a>
+<a href="#strategy">Launch Strategy</a>
+<a href="#timeline">Timeline</a>
+<a href="#monetization">Monetization</a>
+<a href="#appstore">App Store</a>
+<a href="#playbook">Capture Playbook</a>
+</div>
+</nav>
+
+<!-- ==================== TL;DR ==================== -->
+<section id="tldr">
+<h2>TL;DR — The Play</h2>
+<div class="card highlight">
+<div class="verdict go">LAUNCH FREE. Stay free 90-120 days. Introduce freemium at 100K+ users.</div>
+<ul>
+<li><strong>Phase 1 (Months 1-4):</strong> 100% free. Every feature unlocked. Maximize downloads and reviews. Target displaced Yummly users HARD.</li>
+<li><strong>Phase 2 (Months 4-6):</strong> Introduce "Nomfly Pro" — keep core free, paywall premium AI features (advanced meal planning, household mode, grocery partners).</li>
+<li><strong>Phase 3 (Months 6-12):</strong> Optimize conversion. Target 5-8% paid conversion. Add annual plans.</li>
+<li><strong>Phase 4 (Year 2):</strong> Introduce affiliate commerce (grocery delivery commissions). This was Yummly's $200M/yr revenue channel.</li>
+</ul>
+<p style="margin-top:12px;color:var(--dim)">Why this works: Yummly died Dec 2024. 20M users scattered across 5+ mediocre alternatives. No single app replaced it. The window is OPEN but closing — move fast.</p>
+</div>
+</section>
+
+<!-- ==================== YUMMLY AUTOPSY ==================== -->
+<section id="yummly">
+<h2>Yummly: Rise, Fall &amp; Autopsy</h2>
+
+<div class="stats-row">
+<div class="stat"><span class="stat-num">20M</span><span class="stat-label">Registered Users at Peak</span></div>
+<div class="stat"><span class="stat-num">15M</span><span class="stat-label">Monthly Uniques (2016)</span></div>
+<div class="stat"><span class="stat-num">$200M</span><span class="stat-label">Annual Commerce Influenced</span></div>
+<div class="stat"><span class="stat-num">2M+</span><span class="stat-label">Recipes in Database</span></div>
+</div>
+
+<div class="card">
+<h3>Timeline</h3>
+<table>
+<tr><th>Date</th><th>Event</th></tr>
+<tr><td>2008</td><td>Founded by David Feller & Vadim Geshel (ex-eBay, StumbleUpon)</td></tr>
+<tr><td>Apr 2010</td><td>Public launch — semantic recipe search engine</td></tr>
+<tr><td>May 2010</td><td>$1.85M seed (Intel Capital, First Round Capital)</td></tr>
+<tr><td>Mar 2012</td><td>$6M Series A (Unilever Ventures involved)</td></tr>
+<tr><td>Mar 2013</td><td>API launched — 6,500+ company partners</td></tr>
+<tr><td>2014</td><td>15M active US users. Apple "Best of 2014"</td></tr>
+<tr><td>Sep 2015</td><td>$15M Series B — <strong>$100M valuation</strong></td></tr>
+<tr><td>Feb 2016</td><td>15M monthly uniques, ~1M new users/month</td></tr>
+<tr><td>May 2017</td><td style="color:var(--accent)"><strong>Acquired by Whirlpool</strong> (est. &lt;$50M — below $100M valuation)</td></tr>
+<tr><td>2018</td><td>Yummly 2.0 — pivoted to smart appliance integration</td></tr>
+<tr><td>2019-2023</td><td>Slow decline: aggressive ads, appliance focus, fewer standalone updates</td></tr>
+<tr><td>Mar 2022</td><td>PCMag rates 3.0/5 — criticized lack of basic features</td></tr>
+<tr><td>Apr 2024</td><td style="color:var(--danger)"><strong>Entire team (~75 people) laid off</strong></td></tr>
+<tr><td>Dec 20, 2024</td><td style="color:var(--danger)"><strong>App & website permanently shut down. No bulk export.</strong></td></tr>
+</table>
+</div>
+
+<div class="card danger">
+<h3>Why Yummly Died — 5 Fatal Mistakes</h3>
+<ol style="margin-left:20px">
+<li style="margin:8px 0"><strong>Appliance lock-in:</strong> Whirlpool redirected all resources to smart kitchen integration. 95%+ of users didn't own Whirlpool appliances — the app became irrelevant to them.</li>
+<li style="margin:8px 0"><strong>Ad overload:</strong> Post-acquisition ads became extremely intrusive, degrading the free experience that built the user base.</li>
+<li style="margin:8px 0"><strong>Feature stagnation:</strong> By 2022, competitors had pantry tracking, nutrition dashboards, and AI features. Yummly had none.</li>
+<li style="margin:8px 0"><strong>No data portability:</strong> When shutdown was announced, users couldn't bulk-export recipes. Destroyed trust and goodwill overnight.</li>
+<li style="margin:8px 0"><strong>Corporate indifference:</strong> Whirlpool treated Yummly as a cost center, not a product. Financial pressures led to team elimination.</li>
+</ol>
+</div>
+
+<div class="card green">
+<h3>What Yummly Got RIGHT (Features Nomfly Must Have)</h3>
+<table>
+<tr><th>Feature</th><th>Why Users Loved It</th><th>Nomfly Equivalent</th></tr>
+<tr><td>Taste Profile / Personalization</td><td>AI learned your preferences — got better over time</td><td><span class="tag tag-green">Built</span> Taste Quiz + AI recommendations</td></tr>
+<tr><td>Recipe Aggregation</td><td>One-stop search across thousands of sources</td><td><span class="tag tag-orange">Planned</span> Web recipe import</td></tr>
+<tr><td>Auto Grocery Lists</td><td>Select recipes → instant shopping list</td><td><span class="tag tag-green">Built</span> Smart Grocery List</td></tr>
+<tr><td>"Yum" Button (Web Clipper)</td><td>Save recipes from any website</td><td><span class="tag tag-blue">Consider</span> Share Extension</td></tr>
+<tr><td>Dietary Filters</td><td>Allergens, diets, restrictions — foundational</td><td><span class="tag tag-green">Built</span> 6-variable constraint solving</td></tr>
+<tr><td>Guided Cooking</td><td>Step-by-step with timers</td><td><span class="tag tag-green">Built</span> Cooking Mode</td></tr>
+</table>
+</div>
+</section>
+
+<!-- ==================== DISPLACED USERS ==================== -->
+<section id="displaced">
+<h2>Where 20M Yummly Users Went</h2>
+
+<div class="card">
+<p style="margin-bottom:12px">Yummly shut down Dec 20, 2024. <strong>No single app captured the full experience.</strong> The market fragmented:</p>
+<table>
+<tr><th>App</th><th>What It Does</th><th>Gap vs Yummly</th><th>Nomfly Advantage</th></tr>
+<tr><td>Paprika</td><td>Recipe clipping & organization</td><td>No AI, no meal planning, no personalization</td><td><span class="tag tag-green">AI-first</span></td></tr>
+<tr><td>Mealime</td><td>Meal planning + grocery</td><td>Limited recipe library, no taste learning</td><td><span class="tag tag-green">Fridge scanning</span></td></tr>
+<tr><td>Samsung Food</td><td>Video recipe discovery</td><td>Samsung ecosystem lock-in (same mistake)</td><td><span class="tag tag-green">Platform agnostic</span></td></tr>
+<tr><td>Plan to Eat</td><td>Recipe saving + meal calendar</td><td>Ugly UI, no AI features</td><td><span class="tag tag-green">Modern SwiftUI</span></td></tr>
+<tr><td>Peel</td><td>All-in-one</td><td>New/unproven, small library</td><td><span class="tag tag-green">AI vision + decisions</span></td></tr>
+<tr><td>MealThinker</td><td>AI suggestions</td><td>Thin feature set, no grocery integration</td><td><span class="tag tag-green">Full stack</span></td></tr>
+</table>
+<div class="verdict go" style="margin-top:16px">NO app has replicated the full Yummly experience. Nomfly can be the first.</div>
+</div>
+
+<div class="card info">
+<h3>The Yummly User Profile — Who You're Targeting</h3>
+<ul>
+<li><strong>Demographics:</strong> 25-45, skews female (65%), household decision-makers for meals</li>
+<li><strong>Pain points NOW:</strong> Lost years of saved recipes. Using 2-3 apps to replace what Yummly did in one. Frustrated by fragmentation.</li>
+<li><strong>What they'll pay for:</strong> Personalization that learns their taste, dietary constraint handling, grocery list automation</li>
+<li><strong>What they WON'T tolerate:</strong> Ads before recipes, appliance lock-in, losing their data again</li>
+<li><strong>Where to find them:</strong> Reddit (r/recipes, r/mealprep, r/cookingforbeginners), food TikTok, Instagram food accounts, food blogger communities</li>
+</ul>
+</div>
+</section>
+
+<!-- ==================== CASE STUDIES ==================== -->
+<section id="casestudies">
+<h2>Case Studies: Free → Paid Transitions</h2>
+
+<h3>SUCCESS: Apps That Launched Free Then Monetized</h3>
+<div class="card green">
+<table>
+<tr><th>App</th><th>Free Period</th><th>Monetization</th><th>Result</th></tr>
+<tr>
+<td><strong>Duolingo</strong></td>
+<td>5 years (2012-2017)</td>
+<td>Ads + "Plus" subscription at $6.99/mo</td>
+<td><span class="tag tag-green">$500M+ revenue (2023)</span> 8-10% conversion. 80M MAU built the base.</td>
+</tr>
+<tr>
+<td><strong>Instagram</strong></td>
+<td>3 years (2010-2013)</td>
+<td>Ads only — never paywalled features</td>
+<td><span class="tag tag-green">$1B acquisition</span> 150M users before first ad.</td>
+</tr>
+<tr>
+<td><strong>Spotify</strong></td>
+<td>Freemium from day 1</td>
+<td>Ad-supported free + $9.99/mo premium</td>
+<td><span class="tag tag-green">25-30% conversion</span> "Friction freemium" — free tier deliberately degraded.</td>
+</tr>
+<tr>
+<td><strong>Slack</strong></td>
+<td>Freemium from day 1</td>
+<td>Free with 10K message limit → $6.67-$12.50/user/mo</td>
+<td><span class="tag tag-green">30% team conversion</span> Natural friction at scale drove upgrades.</td>
+</tr>
+<tr>
+<td><strong>Calm</strong></td>
+<td>~1-2 years</td>
+<td>$69.99/year subscription</td>
+<td><span class="tag tag-green">$2B valuation (2020)</span> Wellness users pay for "complete" experience.</td>
+</tr>
+</table>
+</div>
+
+<h3>FAILURES: When the Paywall Backfired</h3>
+<div class="card danger">
+<table>
+<tr><th>App</th><th>What Happened</th><th>Lesson for Nomfly</th></tr>
+<tr>
+<td><strong>Evernote</strong></td>
+<td>Restricted free tier in 2016 (2 device limit). Users felt betrayed after years of generous access. Ratings tanked. Users fled to Notion, OneNote.</td>
+<td class="con">NEVER restrict features users already have. Only ADD premium features.</td>
+</tr>
+<tr>
+<td><strong>Rdio</strong></td>
+<td>Free tier too generous → couldn't convert to paid. Bankruptcy 2015.</td>
+<td class="con">Free tier must create a clear upgrade desire. "Friction freemium."</td>
+</tr>
+<tr>
+<td><strong>Sunrise Calendar</strong></td>
+<td>Free app acquired by Microsoft → shut down → users forced to Outlook.</td>
+<td class="con">Acquisition-then-shutdown is the ultimate betrayal. (This is exactly what Whirlpool did to Yummly.)</td>
+</tr>
+<tr>
+<td><strong>Wunderlist</strong></td>
+<td>Acquired by Microsoft → forced migration to To Do → missing features → user revolt.</td>
+<td class="con">Users don't forgive forced migrations.</td>
+</tr>
+<tr>
+<td><strong>Generic utility apps</strong></td>
+<td>Free → hard subscription paywall with no grandfathering = flood of 1-star reviews.</td>
+<td class="con">ALWAYS grandfather existing free users when adding a paywall.</td>
+</tr>
+</table>
+</div>
+
+<div class="card highlight">
+<h3>Key Patterns from Case Studies</h3>
+<table>
+<tr><th>Pattern</th><th>Data</th></tr>
+<tr><td>Optimal free runway before monetizing</td><td><strong>3-6 months</strong> for niche apps, <strong>1-3 years</strong> for mass-market</td></tr>
+<tr><td>Best conversion model for food apps</td><td><strong>Friction freemium:</strong> core free + AI/premium features gated</td></tr>
+<tr><td>Conversion rate benchmark (food/lifestyle)</td><td>5-8% of MAU → paid is excellent</td></tr>
+<tr><td>When paywall backlash occurs</td><td>When existing free features are REMOVED, not when new features are added as paid</td></tr>
+<tr><td>Grandfathering impact</td><td>Apps that grandfather free users retain 3-5x more users during transition</td></tr>
+<tr><td>Revenue per user (food category)</td><td>$3-6/month or $30-50/year is the sweet spot</td></tr>
+</table>
+</div>
+</section>
+
+<!-- ==================== STRATEGY ==================== -->
+<section id="strategy">
+<h2>Nomfly Launch Strategy: The 4-Phase Plan</h2>
+
+<div class="verdict caution">RECOMMENDED: "Generous Freemium" — Launch free, introduce premium at 90-120 days</div>
+
+<h3>Why NOT Freemium From Day 1?</h3>
+<div class="card">
+<ul>
+<li><strong>Day-1 paywalls kill download velocity.</strong> Apple's algorithm heavily weights first-week downloads. A paywall reduces installs by 30-50%.</li>
+<li><strong>You need reviews FAST.</strong> Free apps get 5-10x more reviews. You need 100+ 5-star reviews in week 1 to rank.</li>
+<li><strong>Yummly refugees are skeptical.</strong> They just lost an app to corporate greed. A paywall signals "this will happen again."</li>
+<li><strong>You're unknown.</strong> Nobody pays for an unknown food app on day 1. Trust must be earned.</li>
+</ul>
+</div>
+
+<h3>Why NOT Completely Free Forever?</h3>
+<div class="card">
+<ul>
+<li><strong>Rdio's lesson:</strong> Too-generous free tier = no conversion pressure. Users never upgrade if they don't need to.</li>
+<li><strong>API costs:</strong> Claude Sonnet calls cost money. Unlimited free AI = burn rate problem.</li>
+<li><strong>Investor/sustainability signal:</strong> An app with no revenue path looks like a hobby project.</li>
+</ul>
+</div>
+
+<div class="compare-grid">
+<div class="card green">
+<h4 class="pro">Phase 1: Free Launch (Months 1-4)</h4>
+<ul>
+<li>100% features unlocked for everyone</li>
+<li>AI meal decisions: 10/day (generous but metered)</li>
+<li>Fridge scanning, grocery lists, cooking mode — ALL free</li>
+<li>Focus: downloads, reviews, retention, word of mouth</li>
+<li>Marketing: "From the ashes of Yummly — built for YOU, not appliance companies"</li>
+<li>Goal: <strong>50K-100K downloads</strong></li>
+</ul>
+</div>
+<div class="card" style="border-color:var(--purple)">
+<h4 style="color:var(--purple)">Phase 2: Introduce Pro (Months 4-6)</h4>
+<ul>
+<li>Core remains free forever (recipes, basic meal decisions, grocery lists)</li>
+<li><strong>Nomfly Pro</strong> unlocks:
+<ul>
+<li>Unlimited AI meal decisions</li>
+<li>Household mode (multi-person constraints)</li>
+<li>Advanced nutrition dashboard</li>
+<li>Grocery partner price comparison</li>
+<li>Priority AI (faster, smarter responses)</li>
+</ul>
+</li>
+<li>Pricing: <strong>$4.99/mo or $29.99/yr</strong></li>
+<li><strong>GRANDFATHER all Phase 1 users:</strong> they keep current access for 6 months free</li>
+</ul>
+</div>
+</div>
+
+<div class="compare-grid">
+<div class="card info">
+<h4 style="color:var(--info)">Phase 3: Optimize (Months 6-12)</h4>
+<ul>
+<li>A/B test paywall triggers (after 5th meal decision? After 2 weeks?)</li>
+<li>Add annual plan: $29.99/yr (50% savings)</li>
+<li>Consider lifetime: $79.99 (one-time) — appeals to subscription-fatigued users</li>
+<li>Target: <strong>5-8% paid conversion</strong></li>
+<li>Referral program: give a friend 1 month Pro free</li>
+</ul>
+</div>
+<div class="card" style="border-color:var(--accent)">
+<h4 style="color:var(--accent)">Phase 4: Commerce (Year 2)</h4>
+<ul>
+<li>Affiliate grocery delivery (Instacart, Amazon Fresh)</li>
+<li>Yummly drove <strong>$200M/yr in grocery commerce</strong> — this is the big money</li>
+<li>Kitchen equipment recommendations (affiliate)</li>
+<li>Sponsored recipe placements from food brands</li>
+<li>This is where Nomfly goes from "app" to "platform"</li>
+</ul>
+</div>
+</div>
+</section>
+
+<!-- ==================== TIMELINE ==================== -->
+<section id="timeline">
+<h2>Detailed Launch Timeline</h2>
+
+<div class="card">
+<div class="timeline">
+<div class="timeline-item active">
+<span class="phase-label">NOW — Pre-Launch (April 2026)</span>
+<ul>
+<li>Finalize app, Xcode testing, screenshots</li>
+<li>Apple Developer Program enrollment ($99/yr)</li>
+<li>Set up App Store Connect: metadata, keywords, screenshots, preview video</li>
+<li>Start building social presence: TikTok + Instagram accounts</li>
+</ul>
+</div>
+<div class="timeline-item active">
+<span class="phase-label">Week 1-2 — TestFlight Beta</span>
+<ul>
+<li>Invite 100-500 beta testers (Reddit food communities, food bloggers)</li>
+<li>Message: "We're building the Yummly replacement. Help us get it right."</li>
+<li>Collect feedback, fix bugs, get testimonials</li>
+<li>Beta testers become launch-day reviewers</li>
+</ul>
+</div>
+<div class="timeline-item active">
+<span class="phase-label">Week 3 — App Store Submission</span>
+<ul>
+<li>Submit to App Review (typical: 24-48 hours, sometimes up to 7 days)</li>
+<li>Common rejection reasons: missing privacy policy, unclear permissions, crashes</li>
+<li>Have a privacy policy URL ready (required)</li>
+<li>Prepare marketing assets while waiting</li>
+</ul>
+</div>
+<div class="timeline-item active">
+<span class="phase-label">Week 4 — LAUNCH DAY</span>
+<ul>
+<li>Coordinate: Reddit posts, social media, food blogger outreach</li>
+<li>Post in r/recipes, r/mealprep, r/EatCheapAndHealthy, r/cookingforbeginners</li>
+<li>Ask beta testers to leave reviews (need 100+ in first week)</li>
+<li>First-week download velocity is CRITICAL for App Store ranking</li>
+</ul>
+</div>
+<div class="timeline-item future">
+<span class="phase-label">Month 2-4 — Growth</span>
+<ul>
+<li>TikTok content: "AI scanned my fridge and made THIS meal" — viral format</li>
+<li>Share Cards feature drives organic viral loops</li>
+<li>SEO: food blog with recipe content linking to app</li>
+<li>ASO: monitor keyword rankings, iterate on screenshots</li>
+</ul>
+</div>
+<div class="timeline-item future">
+<span class="phase-label">Month 4-5 — Introduce Nomfly Pro</span>
+<ul>
+<li>Soft launch: in-app banner, not a hard paywall</li>
+<li>Grandfather all existing users with extended free access</li>
+<li>Price: $4.99/mo or $29.99/yr</li>
+</ul>
+</div>
+<div class="timeline-item future">
+<span class="phase-label">Month 6-12 — Scale &amp; Optimize</span>
+<ul>
+<li>Target: 200K+ downloads, 10K+ paid subscribers</li>
+<li>Iterate on paywall placement and triggers</li>
+<li>Launch Android fork (Kotlin + Jetpack Compose)</li>
+</ul>
+</div>
+<div class="timeline-item future">
+<span class="phase-label">Year 2 — Platform Play</span>
+<ul>
+<li>Affiliate commerce (grocery delivery)</li>
+<li>Brand partnerships</li>
+<li>Target: $1M ARR</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ==================== MONETIZATION ==================== -->
+<section id="monetization">
+<h2>Monetization Deep Dive</h2>
+
+<div class="card">
+<h3>Pricing Benchmarks — Food App Category (2025-2026)</h3>
+<table>
+<tr><th>App</th><th>Model</th><th>Monthly</th><th>Annual</th><th>Notes</th></tr>
+<tr><td>NYT Cooking</td><td>Subscription</td><td>$5/mo</td><td>$40/yr</td><td>Editorial content premium</td></tr>
+<tr><td>Mealime Pro</td><td>Freemium</td><td>$6/mo</td><td>$50/yr</td><td>Meal planning + nutrition</td></tr>
+<tr><td>Plan to Eat</td><td>Subscription</td><td>$5/mo</td><td>$40/yr</td><td>Recipe saving + planning</td></tr>
+<tr><td>Yummly Pro (was)</td><td>Freemium</td><td>$3-5/mo</td><td>$30-50/yr</td><td>Ad-free + advanced features</td></tr>
+<tr><td>Paprika</td><td>One-time</td><td>—</td><td>$5 per platform</td><td>Increasingly rare model</td></tr>
+<tr><td style="color:var(--accent)"><strong>Nomfly Pro (rec.)</strong></td><td style="color:var(--accent)"><strong>Freemium</strong></td><td style="color:var(--accent)"><strong>$4.99/mo</strong></td><td style="color:var(--accent)"><strong>$29.99/yr</strong></td><td style="color:var(--accent)"><strong>Sweet spot: undercuts NYT, matches Yummly</strong></td></tr>
+</table>
+</div>
+
+<div class="card highlight">
+<h3>Revenue Model Breakdown</h3>
+<table>
+<tr><th>Revenue Stream</th><th>When</th><th>Potential</th></tr>
+<tr><td><strong>Subscriptions</strong> (Nomfly Pro)</td><td>Month 4+</td><td>$29.99/yr × 5% of MAU. At 100K MAU = $150K/yr</td></tr>
+<tr><td><strong>Affiliate Commerce</strong> (grocery delivery)</td><td>Year 2</td><td>5-8% commission on orders. Yummly did $200M/yr influenced commerce.</td></tr>
+<tr><td><strong>Sponsored Recipes</strong> (brand partnerships)</td><td>Year 2</td><td>$500-$5,000 per campaign. Only when audience is large enough.</td></tr>
+<tr><td><strong>Lifetime Purchase</strong> (optional)</td><td>Month 6+</td><td>$79.99 one-time — captures subscription-fatigued users</td></tr>
+</table>
+
+<blockquote>Yummly's biggest revenue wasn't subscriptions — it was affiliate grocery commerce at $200M/yr. That's where the real money is for Nomfly long-term.</blockquote>
+</div>
+
+<div class="card green">
+<h3>Free vs. Pro Feature Split</h3>
+<table>
+<tr><th>Feature</th><th>Free</th><th>Pro ($4.99/mo)</th></tr>
+<tr><td>Recipe browsing & search</td><td>Unlimited</td><td>Unlimited</td></tr>
+<tr><td>AI meal decisions</td><td>5/day</td><td>Unlimited</td></tr>
+<tr><td>Fridge photo scanning</td><td>3/day</td><td>Unlimited</td></tr>
+<tr><td>Grocery list</td><td>1 active list</td><td>Unlimited lists</td></tr>
+<tr><td>Taste profile</td><td>Basic</td><td>Advanced + household</td></tr>
+<tr><td>Cooking mode</td><td>Full</td><td>Full</td></tr>
+<tr><td>Nutrition dashboard</td><td>Basic macros</td><td>Full breakdown + tracking</td></tr>
+<tr><td>Household mode</td><td>—</td><td>Multi-person constraints</td></tr>
+<tr><td>Grocery partner comparison</td><td>—</td><td>Cross-store price comparison</td></tr>
+<tr><td>Share cards</td><td>1 style</td><td>All styles</td></tr>
+<tr><td>Ads</td><td>Minimal, non-intrusive</td><td>None</td></tr>
+</table>
+<p style="margin-top:12px;color:var(--dim);font-size:.9rem"><strong>Key principle:</strong> Free tier must be genuinely useful (not crippled). Users upgrade because Pro is BETTER, not because free is broken. This is the Duolingo model.</p>
+</div>
+</section>
+
+<!-- ==================== APP STORE ==================== -->
+<section id="appstore">
+<h2>App Store Publishing &amp; ASO Playbook</h2>
+
+<div class="card">
+<h3>Publishing Checklist</h3>
+<table>
+<tr><th>Step</th><th>Details</th><th>Timeline</th></tr>
+<tr><td>1. Developer Program</td><td>Apple Developer Program — $99/year</td><td>Do now</td></tr>
+<tr><td>2. App Store Connect</td><td>Create app record, bundle ID, set pricing</td><td>1 day</td></tr>
+<tr><td>3. Screenshots</td><td>6.7" (iPhone 15 Pro Max) + 6.1" (iPhone 15 Pro). 3-5 per size. Show: meal decision, fridge scan, grocery list, cooking mode</td><td>2-3 days</td></tr>
+<tr><td>4. Preview Video</td><td>15-30 sec showing the "scan fridge → get meal" flow. This is your viral hook.</td><td>2-3 days</td></tr>
+<tr><td>5. Privacy Policy</td><td>Host on GitHub Pages or comparisons repo. Required for submission.</td><td>1 day</td></tr>
+<tr><td>6. App Review</td><td>Typically 24-48 hours. Can take up to 7 days for new developers.</td><td>1 week buffer</td></tr>
+<tr><td>7. TestFlight Beta</td><td>Up to 10,000 external testers. Use for pre-launch buzz.</td><td>1-2 weeks before launch</td></tr>
+</table>
+</div>
+
+<div class="card info">
+<h3>ASO — Keywords &amp; Metadata</h3>
+<h4>App Name</h4>
+<p><strong>Nomfly — AI Meal Decider</strong> (30 char limit)</p>
+<h4>Subtitle</h4>
+<p><strong>Scan Your Fridge, Decide Dinner</strong> (30 char limit)</p>
+<h4>Target Keywords</h4>
+<p style="margin:8px 0">
+<span class="tag tag-orange">meal planner</span>
+<span class="tag tag-orange">recipe finder</span>
+<span class="tag tag-orange">what to cook</span>
+<span class="tag tag-orange">fridge scanner</span>
+<span class="tag tag-orange">dinner ideas</span>
+<span class="tag tag-orange">meal prep</span>
+<span class="tag tag-orange">grocery list</span>
+<span class="tag tag-orange">ai cooking</span>
+<span class="tag tag-orange">yummly alternative</span>
+<span class="tag tag-green">easy recipes</span>
+<span class="tag tag-green">healthy meals</span>
+<span class="tag tag-green">air fryer recipes</span>
+</p>
+<h4>Category</h4>
+<p>Primary: <strong>Food & Drink</strong> | Secondary: <strong>Health & Fitness</strong></p>
+<h4>Seasonal keyword updates</h4>
+<ul>
+<li>Jan: "healthy meal plan", "new year diet"</li>
+<li>Summer: "BBQ recipes", "grilling"</li>
+<li>Nov-Dec: "thanksgiving recipes", "holiday cooking"</li>
+</ul>
+</div>
+
+<div class="card green">
+<h3>Getting Featured by Apple</h3>
+<p>Apple's editorial team actively scouts apps. Nomfly checks several boxes:</p>
+<ul>
+<li><strong>SwiftUI native:</strong> Apple loves apps built with their latest tech</li>
+<li><strong>AI innovation:</strong> Apple Intelligence integration is a huge plus right now</li>
+<li><strong>Privacy-first:</strong> On-device AI fallback aligns with Apple's brand</li>
+<li><strong>Design quality:</strong> Clean, modern UI following HIG</li>
+<li><strong>Accessibility:</strong> VoiceOver, Dynamic Type support</li>
+</ul>
+<p style="margin-top:8px;color:var(--dim)">Pitch Apple editorial 6-8 weeks before a seasonal moment (e.g., New Year's for healthy eating). Use the developer.apple.com portal to submit a story pitch.</p>
+</div>
+</section>
+
+<!-- ==================== CAPTURE PLAYBOOK ==================== -->
+<section id="playbook">
+<h2>Yummly User Capture Playbook</h2>
+
+<div class="card highlight">
+<h3>The Window</h3>
+<p>Yummly shut down <strong>December 20, 2024</strong>. It's been ~15 months. Users are STILL looking for alternatives (Reddit threads active through 2026). But the window narrows every month as people settle into substitutes.</p>
+<div class="verdict caution">ACT IN THE NEXT 3-6 MONTHS. After that, muscle memory locks in and switching costs increase.</div>
+</div>
+
+<div class="card">
+<h3>Tactical Capture Plan</h3>
+<table>
+<tr><th>Tactic</th><th>Details</th><th>Priority</th></tr>
+<tr>
+<td><strong>Reddit takeover</strong></td>
+<td>Post in r/recipes, r/mealprep, r/EatCheapAndHealthy, r/cookingforbeginners. Don't shill — share genuine value: "I built this after Yummly died." Authentic founder story.</td>
+<td><span class="tag tag-red">Critical</span></td>
+</tr>
+<tr>
+<td><strong>"Import from Yummly" feature</strong></td>
+<td>If any users still have Yummly data (screenshots, bookmarks, exported CSVs), build an import tool. Even symbolic — shows you understand their pain.</td>
+<td><span class="tag tag-orange">High</span></td>
+</tr>
+<tr>
+<td><strong>Recipe web clipper</strong></td>
+<td>iOS Share Extension to save recipes from any website. This was Yummly's "Yum button" — the #1 feature users miss.</td>
+<td><span class="tag tag-red">Critical</span></td>
+</tr>
+<tr>
+<td><strong>Data portability pledge</strong></td>
+<td>"Your recipes are yours. Export anytime, in any format." Put this on the App Store listing. Directly addresses Yummly trauma.</td>
+<td><span class="tag tag-red">Critical</span></td>
+</tr>
+<tr>
+<td><strong>TikTok/Reels content</strong></td>
+<td>"I scanned my fridge and AI made THIS" — viral format. Fridge scanning is inherently visual and shareable.</td>
+<td><span class="tag tag-orange">High</span></td>
+</tr>
+<tr>
+<td><strong>Food blogger outreach</strong></td>
+<td>Contact 50+ food bloggers. Offer early access + feature their recipes. They need a platform post-Yummly too.</td>
+<td><span class="tag tag-orange">High</span></td>
+</tr>
+<tr>
+<td><strong>SEO content</strong></td>
+<td>Blog posts targeting "yummly alternative 2026", "best recipe app 2026", "what replaced yummly". Low competition, high intent.</td>
+<td><span class="tag tag-orange">High</span></td>
+</tr>
+<tr>
+<td><strong>"No ads, ever" promise</strong></td>
+<td>The #1 complaint about post-Whirlpool Yummly was aggressive ads. Promise: "We'll never ruin your cooking with ads." Pro removes even minimal ones.</td>
+<td><span class="tag tag-blue">Medium</span></td>
+</tr>
+</table>
+</div>
+
+<div class="card green">
+<h3>Messaging That Resonates with Yummly Users</h3>
+<blockquote>"Built by someone who lost their Yummly recipes too."</blockquote>
+<blockquote>"Your recipes belong to you. Always exportable. Never locked in."</blockquote>
+<blockquote>"AI that learns what YOU like — not what an appliance company wants to sell you."</blockquote>
+<blockquote>"The food app that puts you first. No ads ruining your cooking. No corporate agenda."</blockquote>
+<p style="margin-top:12px;color:var(--dim)">These hit on the exact emotional wounds: data loss, ad overload, corporate indifference, appliance lock-in.</p>
+</div>
+
+<div class="card" style="border-color:var(--purple)">
+<h3>Competitive Positioning Matrix</h3>
+<table>
+<tr><th>Differentiator</th><th>Nomfly</th><th>Paprika</th><th>Mealime</th><th>Samsung Food</th></tr>
+<tr><td>AI meal decisions</td><td><span class="tag tag-green">Yes</span></td><td><span class="tag tag-red">No</span></td><td><span class="tag tag-red">No</span></td><td><span class="tag tag-red">No</span></td></tr>
+<tr><td>Fridge photo scanning</td><td><span class="tag tag-green">Yes</span></td><td><span class="tag tag-red">No</span></td><td><span class="tag tag-red">No</span></td><td><span class="tag tag-red">No</span></td></tr>
+<tr><td>Taste learning</td><td><span class="tag tag-green">Yes</span></td><td><span class="tag tag-red">No</span></td><td><span class="tag tag-orange">Basic</span></td><td><span class="tag tag-orange">Basic</span></td></tr>
+<tr><td>Grocery list</td><td><span class="tag tag-green">Yes</span></td><td><span class="tag tag-red">No</span></td><td><span class="tag tag-green">Yes</span></td><td><span class="tag tag-orange">Basic</span></td></tr>
+<tr><td>Household constraints</td><td><span class="tag tag-green">Yes</span></td><td><span class="tag tag-red">No</span></td><td><span class="tag tag-red">No</span></td><td><span class="tag tag-red">No</span></td></tr>
+<tr><td>Data export</td><td><span class="tag tag-green">Yes</span></td><td><span class="tag tag-green">Yes</span></td><td><span class="tag tag-red">No</span></td><td><span class="tag tag-red">No</span></td></tr>
+<tr><td>Cross-platform</td><td><span class="tag tag-orange">Planned</span></td><td><span class="tag tag-green">Yes</span></td><td><span class="tag tag-green">Yes</span></td><td><span class="tag tag-orange">Samsung only</span></td></tr>
+<tr><td>Modern AI</td><td><span class="tag tag-green">Claude Sonnet</span></td><td><span class="tag tag-red">None</span></td><td><span class="tag tag-red">None</span></td><td><span class="tag tag-orange">Basic</span></td></tr>
+</table>
+</div>
+</section>
+
+<!-- ==================== FINAL VERDICT ==================== -->
+<section id="final">
+<h2>Final Verdict</h2>
+<div class="card highlight">
+<div class="stats-row">
+<div class="stat"><span class="stat-num">90</span><span class="stat-label">Days Free Before Pro</span></div>
+<div class="stat"><span class="stat-num">$4.99</span><span class="stat-label">Monthly Pro Price</span></div>
+<div class="stat"><span class="stat-num">$29.99</span><span class="stat-label">Annual Pro Price</span></div>
+<div class="stat"><span class="stat-num">5-8%</span><span class="stat-label">Target Conversion Rate</span></div>
+</div>
+<div class="verdict go">
+Launch 100% free. Capture Yummly refugees. Build trust. Monetize with premium AI features at 90 days. Never restrict existing free features. Commerce revenue (grocery affiliates) is the long-term play — that's where Yummly made the real money ($200M/yr).
+</div>
+<p style="text-align:center;color:var(--dim);margin-top:12px">The window to replace Yummly is open NOW but closing. Every month of delay = more users locked into substitutes.</p>
+</div>
+</section>
+
+<p style="text-align:center;color:var(--dim);margin-top:40px;font-size:.8rem">Generated April 2026 | Nomfly Launch Strategy v1.0</p>
+
+</div>
+</body>
+</html>
