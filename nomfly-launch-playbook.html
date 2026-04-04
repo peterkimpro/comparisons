@@ -1,0 +1,1861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NomFly Launch Playbook — Food App Intelligence Report</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2333;
+    --surface3: #21262d;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text-muted: #8b949e;
+    --accent: #58a6ff;
+    --accent-green: #3fb950;
+    --accent-red: #f85149;
+    --accent-orange: #d29922;
+    --accent-purple: #a371f7;
+    --accent-teal: #39d5c8;
+    --accent-yellow: #e3b341;
+    --radius: 10px;
+    --nav-height: 60px;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+  /* ========== STICKY NAV ========== */
+  .sticky-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(13, 17, 23, 0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    height: var(--nav-height);
+    display: flex;
+    align-items: center;
+  }
+
+  .sticky-nav .nav-inner {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    width: 100%;
+  }
+  .sticky-nav .nav-inner::-webkit-scrollbar { display: none; }
+
+  .nav-brand {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--accent);
+    white-space: nowrap;
+    margin-right: 12px;
+    padding-right: 16px;
+    border-right: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .nav-link {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    white-space: nowrap;
+    transition: all 0.15s;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+  .nav-link:hover {
+    background: var(--surface2);
+    color: var(--text);
+    text-decoration: none;
+  }
+  .nav-link.active {
+    background: var(--surface2);
+    color: var(--accent);
+  }
+
+  /* ========== HERO HEADER ========== */
+  .hero {
+    background: linear-gradient(160deg, #0d1117 0%, #0f1a2e 40%, #0d1a12 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 64px 0 56px;
+    text-align: center;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 900;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #e6edf3 30%, #58a6ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0 auto 28px;
+  }
+
+  .hero-badges {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    border: 1px solid;
+  }
+  .badge-blue { background: rgba(88,166,255,0.1); border-color: rgba(88,166,255,0.3); color: var(--accent); }
+  .badge-green { background: rgba(63,185,80,0.1); border-color: rgba(63,185,80,0.3); color: var(--accent-green); }
+  .badge-orange { background: rgba(211,153,34,0.1); border-color: rgba(211,153,34,0.3); color: var(--accent-yellow); }
+  .badge-purple { background: rgba(163,113,247,0.1); border-color: rgba(163,113,247,0.3); color: var(--accent-purple); }
+
+  /* ========== MAIN CONTENT ========== */
+  main { padding: 48px 0 80px; }
+
+  /* ========== SECTION ========== */
+  .section {
+    margin-bottom: 16px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    scroll-margin-top: calc(var(--nav-height) + 16px);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    background: var(--surface);
+    cursor: pointer;
+    user-select: none;
+    gap: 16px;
+    transition: background 0.15s;
+  }
+  .section-header:hover { background: var(--surface2); }
+
+  .section-header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .section-number {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+
+  .section-title-text {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .section-meta {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .chevron {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    color: var(--text-muted);
+    transition: transform 0.25s;
+  }
+  .section.open .chevron { transform: rotate(180deg); }
+
+  .section-body {
+    display: none;
+    padding: 28px 28px 32px;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+  }
+  .section.open .section-body { display: block; }
+
+  /* ========== TYPOGRAPHY INSIDE SECTIONS ========== */
+  .section-body h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 28px 0 12px;
+  }
+  .section-body h3:first-child { margin-top: 0; }
+
+  .section-body h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 20px 0 8px;
+  }
+
+  .section-body p {
+    font-size: 0.95rem;
+    color: var(--text);
+    margin-bottom: 12px;
+    line-height: 1.75;
+  }
+
+  .section-body ul, .section-body ol {
+    padding-left: 20px;
+    margin-bottom: 16px;
+  }
+
+  .section-body li {
+    font-size: 0.95rem;
+    color: var(--text);
+    margin-bottom: 8px;
+    line-height: 1.65;
+  }
+
+  .section-body strong { color: var(--text); font-weight: 700; }
+
+  /* ========== TABLES ========== */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 16px 0 20px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+
+  thead {
+    background: var(--surface2);
+  }
+
+  th {
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 700;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  tbody tr:hover { background: var(--surface2); }
+  tbody tr:nth-child(even) { background: rgba(22, 27, 34, 0.5); }
+  tbody tr:nth-child(even):hover { background: var(--surface2); }
+
+  td strong { color: var(--accent); }
+
+  /* ========== CALLOUT BOXES ========== */
+  .callout {
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: 0.9rem;
+    line-height: 1.65;
+    border-left: 3px solid;
+  }
+
+  .callout-blue {
+    background: rgba(88,166,255,0.07);
+    border-color: var(--accent);
+    color: var(--text);
+  }
+  .callout-green {
+    background: rgba(63,185,80,0.07);
+    border-color: var(--accent-green);
+    color: var(--text);
+  }
+  .callout-orange {
+    background: rgba(211,153,34,0.08);
+    border-color: var(--accent-yellow);
+    color: var(--text);
+  }
+  .callout-purple {
+    background: rgba(163,113,247,0.08);
+    border-color: var(--accent-purple);
+    color: var(--text);
+  }
+  .callout-red {
+    background: rgba(248,81,73,0.07);
+    border-color: var(--accent-red);
+    color: var(--text);
+  }
+
+  .callout-title {
+    font-weight: 700;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  /* ========== STAT CARDS ========== */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin: 16px 0 20px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--accent);
+    display: block;
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  /* ========== KEYWORD TAGS ========== */
+  .tag-group { margin: 10px 0; }
+
+  .tag-group-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tag {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+  .tag.high { border-color: rgba(248,81,73,0.4); color: #f85149; background: rgba(248,81,73,0.06); }
+  .tag.med { border-color: rgba(211,153,34,0.4); color: var(--accent-yellow); background: rgba(211,153,34,0.06); }
+  .tag.low { border-color: rgba(63,185,80,0.4); color: var(--accent-green); background: rgba(63,185,80,0.06); }
+  .tag.emerging { border-color: rgba(88,166,255,0.4); color: var(--accent); background: rgba(88,166,255,0.06); }
+
+  /* ========== TIMELINE ========== */
+  .timeline {
+    position: relative;
+    padding-left: 28px;
+    margin: 16px 0;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--border);
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 20px;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -24px;
+    top: 6px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg);
+  }
+
+  .timeline-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+  }
+
+  .timeline-content {
+    font-size: 0.92rem;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* ========== TAKEAWAY LIST ========== */
+  .takeaway-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .takeaway-list li {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 14px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+  }
+
+  .takeaway-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #0d1117;
+    font-weight: 800;
+    font-size: 0.78rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ========== SOURCES ========== */
+  .sources-list {
+    list-style: none;
+    padding: 0;
+    columns: 2;
+    gap: 16px;
+  }
+
+  .sources-list li {
+    padding: 6px 0;
+    font-size: 0.82rem;
+    break-inside: avoid;
+    margin-bottom: 2px;
+  }
+
+  /* ========== FOOTER ========== */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 24px 0;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  footer a { color: var(--accent); }
+
+  /* ========== SECTION COLORS ========== */
+  .s1 .section-number { background: rgba(88,166,255,0.15); color: var(--accent); }
+  .s2 .section-number { background: rgba(63,185,80,0.15); color: var(--accent-green); }
+  .s3 .section-number { background: rgba(211,153,34,0.15); color: var(--accent-yellow); }
+  .s4 .section-number { background: rgba(163,113,247,0.15); color: var(--accent-purple); }
+  .s5 .section-number { background: rgba(248,81,73,0.15); color: var(--accent-red); }
+  .s6 .section-number { background: rgba(57,213,200,0.15); color: var(--accent-teal); }
+  .s7 .section-number { background: rgba(240,136,62,0.15); color: #f0883e; }
+  .s8 .section-number { background: rgba(88,166,255,0.15); color: var(--accent); }
+  .s9 .section-number { background: rgba(63,185,80,0.15); color: var(--accent-green); }
+  .s10 .section-number { background: rgba(211,153,34,0.15); color: var(--accent-yellow); }
+  .s11 .section-number { background: rgba(163,113,247,0.15); color: var(--accent-purple); }
+
+  .s1 .section-header { border-left: 3px solid var(--accent); }
+  .s2 .section-header { border-left: 3px solid var(--accent-green); }
+  .s3 .section-header { border-left: 3px solid var(--accent-yellow); }
+  .s4 .section-header { border-left: 3px solid var(--accent-purple); }
+  .s5 .section-header { border-left: 3px solid var(--accent-red); }
+  .s6 .section-header { border-left: 3px solid var(--accent-teal); }
+  .s7 .section-header { border-left: 3px solid #f0883e; }
+  .s8 .section-header { border-left: 3px solid var(--accent); }
+  .s9 .section-header { border-left: 3px solid var(--accent-green); }
+  .s10 .section-header { border-left: 3px solid var(--accent-yellow); }
+  .s11 .section-header { border-left: 3px solid var(--accent-purple); }
+
+  /* ========== EXPAND ALL BTN ========== */
+  .controls {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+  }
+
+  .expand-btn {
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-muted);
+    font-size: 0.83rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .expand-btn:hover { border-color: var(--accent); color: var(--text); }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 700px) {
+    .section-body { padding: 20px 16px 24px; }
+    .section-header { padding: 16px 16px; }
+    .sources-list { columns: 1; }
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+    .hero { padding: 40px 0 36px; }
+    .hero h1 { font-size: 1.9rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== STICKY NAV ========== -->
+<nav class="sticky-nav">
+  <div class="container">
+    <div class="nav-inner">
+      <span class="nav-brand">NomFly Playbook</span>
+      <a class="nav-link" href="#s1">1. ASO</a>
+      <a class="nav-link" href="#s2">2. Keywords</a>
+      <a class="nav-link" href="#s3">3. Launch Day</a>
+      <a class="nav-link" href="#s4">4. Apple Editorial</a>
+      <a class="nav-link" href="#s5">5. Social Media</a>
+      <a class="nav-link" href="#s6">6. Influencers</a>
+      <a class="nav-link" href="#s7">7. PR</a>
+      <a class="nav-link" href="#s8">8. Product Hunt</a>
+      <a class="nav-link" href="#s9">9. Cross-Promo</a>
+      <a class="nav-link" href="#s10">10. Case Studies</a>
+      <a class="nav-link" href="#s11">11. Monetization</a>
+      <a class="nav-link" href="#budget">Budget</a>
+      <a class="nav-link" href="#takeaways">Takeaways</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ========== HERO ========== -->
+<div class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Comprehensive Intelligence Report · 2025–2026</div>
+    <h1>Getting a Food App<br>to the Top of the App Store</h1>
+    <p class="hero-subtitle">The complete playbook: ASO, keywords, launch strategy, influencer partnerships, PR, monetization, and real case studies.</p>
+    <div class="hero-badges">
+      <span class="badge badge-blue">11 Sections</span>
+      <span class="badge badge-green">Food &amp; Recipe Category</span>
+      <span class="badge badge-orange">iOS App Store 2025–2026</span>
+      <span class="badge badge-purple">30+ Source Citations</span>
+    </div>
+  </div>
+</div>
+
+<!-- ========== MAIN ========== -->
+<main>
+<div class="container">
+  <div class="controls">
+    <button class="expand-btn" onclick="toggleAll()">Expand All Sections</button>
+  </div>
+
+  <!-- ===== SECTION 1: ASO ===== -->
+  <div class="section s1" id="s1">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-header-left">
+        <div class="section-number">01</div>
+        <div>
+          <div class="section-title-text">ASO — App Store Optimization</div>
+          <div class="section-meta">Title · Subtitle · Keywords · Screenshots · Algorithm · Localization</div>
+        </div>
+      </div>
+      <svg class="chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+    </div>
+    <div class="section-body">
+
+      <h3>App Title, Subtitle, and Keyword Field</h3>
+      <p>The App Store gives you three indexed metadata fields, ranked by algorithmic weight:</p>
+      <ol>
+        <li><strong>App Name (30 characters)</strong> — Strongest ranking signal. Include your brand name + 1–2 high-value keywords. Example pattern: <code>[BrandName]: [Primary Keyword] &amp; [Secondary Keyword]</code>. For reference, Yummly uses "Yummly Recipes &amp; Cooking Tools."</li>
+        <li><strong>Subtitle (30 characters)</strong> — Second-strongest ranking signal. Use this for complementary keywords not in the title. Yummly uses "Personalized Meal Plans &amp; More" (though "More" wastes characters).</li>
+        <li><strong>Keyword Field (100 characters)</strong> — Third in weight. Use comma-separated keywords with NO spaces after commas. Do NOT repeat words already in your title or subtitle. Avoid stop words (the, and, your, with). Apps ranked 150–250 are 4× more likely to waste space on filler words.</li>
+      </ol>
+
+      <div class="callout callout-orange">
+        <span class="callout-title">Critical Rules</span>
+        Never use the word "app" in your metadata (~1.1% of top apps do this, and it wastes space). Action-oriented keywords outperform descriptive terms. Adding "AI" to metadata is the fastest-growing keyword trend across the store (22% penetration in Photo/Video, growing in Food). Including the current year ("2025" or "2026") signals freshness.
+      </div>
+
+      <p><strong>Recommended title structure for a food app:</strong><br>
+      <code>[BrandName]: Recipes &amp; Meal Planner</code> or <code>[BrandName] - AI Recipe &amp; Meal Prep</code></p>
+
+      <h3>Keywords That Work in Food / Recipe / Meal Planning</h3>
+
+      <div class="tag-group">
+        <span class="tag-group-label">High-value primary keywords</span>
+        <div class="tags">
+          <span class="tag high">recipes</span>
+          <span class="tag high">meal planner</span>
+          <span class="tag high">meal prep</span>
+          <span class="tag high">cooking</span>
+          <span class="tag high">grocery list</span>
+          <span class="tag high">diet</span>
+          <span class="tag high">healthy eating</span>
+          <span class="tag high">calories</span>
+          <span class="tag high">nutrition</span>
+        </div>
+      </div>
+      <div class="tag-group">
+        <span class="tag-group-label">Strong secondary keywords</span>
+        <div class="tags">
+          <span class="tag med">dinner ideas</span>
+          <span class="tag med">easy recipes</span>
+          <span class="tag med">weekly meal plan</span>
+          <span class="tag med">food tracker</span>
+          <span class="tag med">pantry</span>
+          <span class="tag med">leftovers</span>
+          <span class="tag med">budget meals</span>
+          <span class="tag med">air fryer</span>
+          <span class="tag med">instant pot</span>
+          <span class="tag med">keto</span>
+          <span class="tag med">vegan</span>
+          <span class="tag med">gluten-free</span>
+        </div>
+      </div>
+      <div class="tag-group">
+        <span class="tag-group-label">Emerging high-value keywords</span>
+        <div class="tags">
+          <span class="tag emerging">AI recipes</span>
+          <span class="tag emerging">AI meal plan</span>
+          <span class="tag emerging">ingredient scanner</span>
+          <span class="tag emerging">what to cook</span>
+          <span class="tag emerging">cook with what I have</span>
+        </div>
+      </div>
+
+      <h3>Screenshot and Preview Video Best Practices</h3>
+
+      <h4>Screenshots</h4>
+      <ul>
+        <li>90% of users do not scroll past the third screenshot — your first three images must convey the full value proposition</li>
+        <li>Well-optimized screenshots increase conversion rates by <strong>20–35%</strong></li>
+        <li>Use benefit-driven captions with large, bold typography on clean/dark backgrounds</li>
+        <li>Tell a story: Screenshot 1 = hero value proposition, Screenshots 2–3 = key features, Screenshots 4–6 = secondary features and social proof</li>
+        <li>For food apps: show beautiful food imagery alongside the UI (not just plain UI screenshots)</li>
+        <li>Bright colors and high-contrast designs measurably increase conversion rates</li>
+        <li>A/B testing typically yields <strong>10–25%</strong> conversion improvement</li>
+      </ul>
+
+      <h4>Preview Video</h4>
+      <ul>
+        <li>Adding a preview video can boost conversion rates by <strong>20–40%</strong></li>
+        <li>Videos autoplay muted — use on-screen captions/callouts</li>
+        <li>Lead with the most visually compelling feature in the first 3 seconds</li>
+        <li>Maximum 30 seconds; show real in-app footage (required by Apple)</li>
+        <li>For food apps, show recipe discovery, cooking process, and meal planning in action</li>
+        <li>Localize videos for international markets</li>
+      </ul>
+
+      <h3>Rating / Review Strategies</h3>
+      <ul>
+        <li>Apps with 4.0+ stars convert significantly better; apps with 4.5+ stars receive <strong>3× more installs</strong> on average</li>
+        <li>90% of featured App Store apps have 4.0+ ratings</li>
+        <li><strong>When to ask:</strong> After positive moments — when a user saves a recipe, completes a meal plan, or finishes cooking a dish. NEVER during onboarding or after an error</li>
+        <li><strong>Apple's SKStoreReviewController:</strong> Use it, but implement cooldown logic. Apple limits prompts to 3 per year per user</li>
+        <li><strong>Respond to all reviews</strong> (especially negative ones) — demonstrates responsiveness, which Apple considers</li>
+        <li><strong>Strategy:</strong> Route unhappy users to a feedback form BEFORE they hit the App Store. Use a "How's your experience?" gate first</li>
+      </ul>
+
+      <h3>How the App Store Search Algorithm Works (2025–2026)</h3>
+      <p>The algorithm operates on two levels:</p>
+      <ol>
+        <li><strong>Eligibility:</strong> Is the keyword present in your metadata?</li>
+        <li><strong>Relevance:</strong> Quality signals that determine ranking position among eligible apps</li>
+      </ol>
+
+      <h4>Key Ranking Factors (approximate order of influence)</h4>
+      <ul>
+        <li>Download velocity (installs over a recent time window, especially 24–72 hours)</li>
+        <li>Total download volume</li>
+        <li>User ratings and review volume</li>
+        <li>Retention and engagement metrics (how long users stay, how often they return)</li>
+        <li>Uninstall rates</li>
+        <li>Conversion rate (tap-through to install)</li>
+        <li>Revenue performance</li>
+        <li>Update frequency (top apps update 1–4 times monthly; median interval ~18 days)</li>
+      </ul>
+
+      <h4>2025 Algorithm Changes</h4>
+      <ul>
+        <li>Screenshot captions now impact rankings (June 2025)</li>
+        <li>In-app events are indexed by Apple's search algorithm</li>
+        <li>Custom Product Pages (CPPs) now appear in organic search results (previously only paid)</li>
+        <li>Apple introduced AI-generated tags</li>
+        <li>Retention now carries more weight than ever — Apple and Google both shifted from pure install volume to retention quality</li>
+      </ul>
+
+      <h3>Localization Strategies</h3>
+      <ul>
+        <li>Localized listings see <strong>30–40% higher conversion rates</strong> in international markets</li>
+        <li>The App Store supports 40 languages — you can localize metadata without localizing the app itself</li>
+        <li><strong>Priority markets for food apps:</strong> Start with English (US, UK, AU), then Spanish, French, German, Japanese, Portuguese (Brazil), Korean</li>
+        <li>Localize keywords separately for each market (search terms differ by region)</li>
+        <li>Adapt screenshots and visual content for each culture (food imagery especially)</li>
+        <li>Real example: Zomato Lite achieved <strong>89% higher order completion</strong> in Kerala by localizing recipe categories to regional dishes</li>
+      </ul>
+
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: KEYWORDS ===== -->
+  <div class="section s2" id="s2">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-header-left">
+        <div class="section-number">02</div>
+        <div>
+          <div class="section-title-text">Keyword Strategy</div>
+          <div class="section-meta">High-volume · Seasonal trends · Research tools</div>
+        </div>
+      </div>
+      <svg class="chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+    </div>
+    <div class="section-body">
+
+      <h3>High-Volume, Low-Competition Keywords</h3>
+      <p>The food app space is extremely competitive at the head terms. Strategy must focus on specificity:</p>
+
+      <div class="tag-group">
+        <span class="tag-group-label">Head terms — high volume, high competition (dominated by Yummly, Tasty, Samsung Food)</span>
+        <div class="tags">
+          <span class="tag high">recipes</span>
+          <span class="tag high">cooking</span>
+          <span class="tag high">meal planner</span>
+          <span class="tag high">food</span>
+        </div>
+      </div>
+      <div class="tag-group">
+        <span class="tag-group-label">Mid-tail opportunities — moderate volume, moderate competition</span>
+        <div class="tags">
+          <span class="tag med">budget meal planner</span>
+          <span class="tag med">what to cook tonight</span>
+          <span class="tag med">leftover recipes</span>
+          <span class="tag med">quick dinner ideas</span>
+          <span class="tag med">air fryer recipes</span>
+          <span class="tag med">meal prep for beginners</span>
+          <span class="tag med">AI recipe generator</span>
+          <span class="tag med">cook with what I have</span>
+        </div>
+      </div>
+      <div class="tag-group">
+        <span class="tag-group-label">Long-tail opportunities — lower volume, low competition</span>
+        <div class="tags">
+          <span class="tag low">healthy meal plan for family of 4</span>
+          <span class="tag low">30 minute weeknight dinners</span>
+          <span class="tag low">college student meal prep</span>
+          <span class="tag low">anti-inflammatory recipes</span>
+          <span class="tag low">high protein meal prep</span>
+          <span class="tag low">Mediterranean diet meal plan</span>
+          <span class="tag low">grocery list generator from recipes</span>
+        </div>
+      </div>
+
+      <h3>Seasonal Keyword Trends</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Period</th>
+              <th>Trending Keywords</th>
+              <th>Strategy</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>January</strong> (New Year resolutions)</td><td>healthy eating, diet meal plan, weight loss recipes, clean eating, meal prep for weight loss</td><td>HIGHEST priority launch window for health-focused food apps</td></tr>
+            <tr><td><strong>February</strong></td><td>Valentine's dinner, date night recipes, romantic cooking</td><td>Short spike, good for themed content</td></tr>
+            <tr><td><strong>March–April</strong></td><td>Easter recipes, spring meals, Passover recipes, Lent recipes</td><td>Moderate seasonal content</td></tr>
+            <tr><td><strong>May</strong></td><td>Cinco de Mayo, summer grilling, BBQ recipes</td><td>Begin summer keyword shift</td></tr>
+            <tr><td><strong>June–August</strong></td><td>grilling recipes, summer salads, easy no-cook meals, picnic food</td><td>Outdoor/easy cooking focus</td></tr>
+            <tr><td><strong>September</strong></td><td>back to school meals, lunch box ideas, fall recipes</td><td>Family-focused keywords surge</td></tr>
+            <tr><td><strong>October–November</strong></td><td>Thanksgiving recipes, Halloween treats, holiday baking, pumpkin recipes</td><td>SECOND highest seasonal peak</td></tr>
+            <tr><td><strong>December</strong></td><td>Christmas cookies, holiday meal planning, New Year's Eve appetizers</td><td>Major spike into January</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout callout-blue">
+        <span class="callout-title">Key Insight: Device-Gifting Season</span>
+        Late December through early January is when many people receive new devices, causing increased App Store activity. Fitness, habit-tracking, and meal planning apps see the biggest spikes. If health/wellness is part of your value prop, a January launch (or major feature update) is optimal.
+      </div>
+
+      <h3>Tools and Methods for Keyword Research</h3>
+
+      <h4>Primary ASO Keyword Tools</h4>
+      <ul>
+        <li><strong>AppTweak</strong> ($69–299/mo) — Best balance of features and price; Atlas AI engine provides automated recommendations; Apple Search Ads integration. ~4× more affordable than Sensor Tower</li>
+        <li><strong>Sensor Tower</strong> (merged with data.ai in 2024) — Industry leader; most comprehensive data; expensive (enterprise pricing, typically $500+/mo)</li>
+        <li><strong>MobileAction</strong> — Strong competitive intelligence; good for tracking competitor keyword changes</li>
+        <li><strong>AppFollow</strong> — Good for review monitoring + basic ASO</li>
+        <li><strong>Appfigures</strong> — Excellent free tier for indie developers; keyword explorer + rank tracking</li>
+      </ul>
+
+      <h4>Free / Low-Cost Research Methods</h4>
+      <ul>
+        <li>Apple Search Ads (Basic tier: free to set up, get keyword suggestions)</li>
+        <li>App Store auto-suggest (type partial keywords to see what Apple suggests)</li>
+        <li>Google Keyword Planner (for directional volume data)</li>
+        <li>Competitor metadata analysis (study the title/subtitle/keywords of top 20 Food &amp; Drink apps)</li>
+      </ul>
+
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: LAUNCH DAY ===== -->
+  <div class="section s3" id="s3">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-header-left">
+        <div class="section-number">03</div>
+        <div>
+          <div class="section-title-text">Launch Day Downloads &amp; Ranking Algorithm</div>
+          <div class="section-meta">Burst campaigns · Pre-orders · Recommended launch timeline</div>
+        </div>
+      </div>
+      <svg class="chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+    </div>
+    <div class="section-body">
+
+      <h3>How Apple Weighs First-Day / First-Week Downloads</h3>
+      <ul>
+        <li>The <strong>first 30 days after launch carry disproportionate algorithmic weight.</strong> High installs and strong engagement during this window create ranking momentum that is extremely difficult to replicate later</li>
+        <li>Download velocity (installs per time period) is MORE important than total cumulative downloads</li>
+        <li>The critical measurement window is <strong>24–72 hours</strong> — a strong install spike signals relevance and demand</li>
+        <li>However, modern algorithms also evaluate quality: retention, engagement, and uninstall rates during this same window</li>
+        <li>Without effective retention, ranking gains from a launch spike typically evaporate within <strong>7–14 days</strong></li>
+      </ul>
+
+      <h3>The "Burst Campaign" Strategy</h3>
+      <p>A burst campaign drives a large volume of installs within 24–48 hours to exploit the velocity-weighted algorithm:</p>
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <span class="stat-value">120+</span>
+          <span class="stat-label">Min daily installs for basic Food &amp; Drink ranking (US)</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value">5K–15K</span>
+          <span class="stat-label">Daily downloads needed for Top 10 Food &amp; Drink (US)</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value">$4.06</span>
+          <span class="stat-label">Apple Search Ads CPI (US market, 2025)</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value">~$40K</span>
+          <span class="stat-label">Cost for 10,000-download US burst (paid acquisition only)</span>
+        </div>
+      </div>
+
+      <ul>
+        <li><strong>Best practice:</strong> Maintain consistent velocity rather than extreme spikes (looks more natural to the algorithm and reduces penalty risk)</li>
+        <li><strong>Multi-channel approach:</strong> Combine paid ads, organic social, PR, influencer campaigns, and email list to create a concentrated launch window rather than relying on a single channel</li>
+        <li><strong>Risk:</strong> Without strong fundamentals (good app, retention), ranking gains evaporate as velocity returns to normal</li>
+      </ul>
+
+      <h3>Pre-Order Strategies</h3>
+      <ul>
+        <li>Apple allows pre-orders up to <strong>180 days</strong> before release</li>
+        <li>Pre-ordered apps are discoverable in search results and can appear on Today, Games, and Apps tabs if featured</li>
+        <li>Pre-order downloads count toward Day 1 download totals when the app releases</li>
+        <li>You can release in specific regions first and set different release dates per region</li>
+        <li><strong>Strategy:</strong> Use the pre-order period to build a waitlist, generate press coverage, and create social media anticipation — all downloads accumulate and hit on launch day</li>
+      </ul>
+
+      <h3>Recommended Launch Timeline</h3>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-label">T–180 Days</div>
+          <div class="timeline-content">Set up pre-order on App Store</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-label">T–90 Days</div>
+          <div class="timeline-content">Submit Apple editorial featuring nomination</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-label">T–60 Days</div>
+          <div class="timeline-content">Begin influencer outreach and PR briefings</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-label">T–30 Days</div>
+          <div class="timeline-content">Activate waitlist email campaign; ramp social media</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-label">T–14 Days</div>
+          <div class="timeline-content">Offer embargoed press briefings</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-label">T–7 Days</div>
+          <div class="timeline-content">Product Hunt ship page live; final email to waitlist</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-label">Launch Day</div>
+          <div class="timeline-content">Coordinate all channels: PR embargo lifts, social blitz, email blast, influencer posts, paid ads activate, Product Hunt launch — all simultaneously</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-label">T+7 Days</div>
+          <div class="timeline-content">Sustain velocity with secondary content and ad spend</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-label">T+30 Days</div>
+          <div class="timeline-content">Evaluate and optimize; submit second featuring nomination if major update delivered</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: APPLE EDITORIAL ===== -->
+  <div class="section s4" id="s4">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-header-left">
+        <div class="section-number">04</div>
+        <div>
+          <div class="section-title-text">Getting Featured by Apple Editorial</div>
+          <div class="section-meta">9 criteria · Submission process · Apple technologies · Real examples</div>
+        </div>
+      </div>
+      <svg class="chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+    </div>
+    <div class="section-body">
+
+      <h3>What Apple Looks For (9 Key Criteria)</h3>
+      <ol>
+        <li><strong>Design quality</strong> — Intuitive UI/UX, visually appealing, smooth performance, minimal bugs</li>
+        <li><strong>Technology integration</strong> — Use of latest Apple frameworks (SwiftUI, WidgetKit, App Intents, ARKit, Live Activities)</li>
+        <li><strong>App Store page optimization</strong> — Clear metadata, recognizable icon, high-quality screenshots</li>
+        <li><strong>User engagement</strong> — Strong reviews, active response to user feedback</li>
+        <li><strong>Marketing visibility</strong> — Active social media, influencer collaborations</li>
+        <li><strong>Regular updates</strong> — Meaningful new features (not just bug fixes), descriptive release notes</li>
+        <li><strong>Localization</strong> — Multiple language support, culturally relevant content</li>
+        <li><strong>Apple guideline compliance</strong> — Privacy, security, all review guidelines met</li>
+        <li><strong>Unique value</strong> — Original functionality solving real user problems</li>
+      </ol>
+
+      <h3>How to Submit for Editorial Consideration</h3>
+      <ol>
+        <li>Go to <strong>App Store Connect &gt; Featuring Nominations</strong></li>
+        <li>Create a nomination with an informative title</li>
+        <li>Select type: new launch, major update, or new content</li>
+        <li>Write a compelling description highlighting uniqueness and alignment with Apple values</li>
+        <li>Set a publish date (minimum <strong>3 weeks</strong> after submission; ideally submit <strong>3 months</strong> in advance for major featuring)</li>
+        <li>Complete ALL form fields (don't leave any blank)</li>
+        <li>Add supplementary details: related apps, target countries, in-app events, localization info</li>
+        <li>Processing takes up to 30 days; even promising apps may not receive a response</li>
+      </ol>
+
+      <h3>Apple Technologies That Get You Noticed (2025–2026)</h3>
+      <p>For a food app, implement these to maximize featuring chances:</p>
+      <ul>
+        <li><strong>SwiftUI</strong> — Build natively with Apple's modern UI framework</li>
+        <li><strong>WidgetKit</strong> — Home screen widgets showing today's meal plan, recipe of the day, or cooking timer (2025 update expanded widget memory by 15%)</li>
+        <li><strong>App Intents / Siri Shortcuts</strong> — "Hey Siri, what's for dinner tonight?" or "Add to my calories log"</li>
+        <li><strong>Live Activities</strong> — Show cooking timer progress on lock screen</li>
+        <li><strong>Interactive Widgets</strong> — Buttons and toggles directly on widgets (iOS 17+)</li>
+        <li><strong>Control Center controls</strong> — Quick-access cooking timer in Control Center</li>
+        <li><strong>Apple Pencil Pro</strong> — Custom actions for recipe annotation on iPad</li>
+        <li><strong>Spotlight integration</strong> — Let users search recipes from Spotlight</li>
+        <li><strong>SharePlay</strong> — Cook together with friends via FaceTime</li>
+      </ul>
+
+      <h3>Real Examples of Food Apps That Got Featured</h3>
+      <ul>
+        <li><strong>Bon Appétit</strong> debuted at #1 on Apple's "Apps We Love" list when launching its streaming channel app</li>
+        <li><strong>Eater</strong> received featuring after redesigning its app to focus on restaurant discovery and reservation integration</li>
+        <li><strong>Kitchen Stories</strong> has been featured multiple times for its clean design and use of step-by-step cooking videos</li>
+        <li>Apps that embrace seasonal events (Thanksgiving, New Year healthy eating) often get featured in curated collections</li>
+      </ul>
+
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: SOCIAL MEDIA ===== -->
+  <div class="section s5" id="s5">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-header-left">
+        <div class="section-number">05</div>
+        <div>
+          <div class="section-title-text">Social Media Launch Strategies</div>
+          <div class="section-meta">TikTok · Instagram · Reddit · Twitter/X · Waitlist building</div>
+        </div>
+      </div>
+      <svg class="chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+    </div>
+    <div class="section-body">
+
+      <h3>TikTok Strategies for Food Apps</h3>
+      <p>TikTok is the #1 platform for food content discovery. The food and beverage sector saw a <strong>40% increase in TikTok ad spend</strong> in 2024, with projected 25% increase in 2025.</p>
+
+      <ul>
+        <li>Create <strong>15–30 second vertical videos</strong> showing raw ingredients to finished dish with quick cuts, close-ups, and satisfying sounds (sizzling, chopping, pouring)</li>
+        <li><strong>First 3 seconds are critical</strong> — hook immediately with the finished dish or a surprising ingredient</li>
+        <li><strong>Hashtag strategy:</strong> Combine popularity hashtags (#FoodTok, #Cooking, #Recipes) with niche hashtags (#AirFryerSnacks, #LazyLunchIdeas, #ViralBites2025, #MealPrepSunday)</li>
+        <li>Create a branded hashtag challenge (a TikTok recipe challenge drove <strong>24% increase in high-intent installs</strong> for one regional app)</li>
+        <li>UGC (user-generated content) is essential: 3 in 4 millennial users find TikTok creator content believable</li>
+        <li>TikTok-driven installs show <strong>32–56% lower CPI</strong> than other paid channels with higher retention</li>
+        <li><strong>Cross-post</strong> TikTok content to Instagram Reels and YouTube Shorts</li>
+      </ul>
+
+      <h3>Instagram Launch Strategies</h3>
+      <ul>
+        <li><strong>Reels</strong> are the primary growth mechanism (cross-post from TikTok)</li>
+        <li>Use <strong>Countdown stickers</strong> in Stories for launch day anticipation</li>
+        <li>Create a <strong>visual-first brand identity</strong> — consistent food photography style</li>
+        <li>Leverage <strong>Collab posts</strong> with food influencers for double the reach</li>
+        <li>Use <strong>Guides</strong> feature to curate recipe collections that drive app downloads</li>
+        <li><strong>Instagram Shopping</strong> integration if you sell meal kits or cookware alongside the app</li>
+      </ul>
+
+      <h3>Reddit Strategies</h3>
+
+      <h4>Pre-Launch (Critical)</h4>
+      <ul>
+        <li>Build account credibility: aim for <strong>100+ karma minimum</strong> (ideally 500+) before any promotional activity</li>
+        <li>Spend weeks/months genuinely answering questions in food subreddits</li>
+        <li>Moderators WILL check your account history during launch week</li>
+      </ul>
+
+      <h4>Key Subreddits</h4>
+      <div class="tags" style="margin-bottom: 16px;">
+        <span class="tag">r/mealprep (1.2M+ members)</span>
+        <span class="tag">r/cooking (4M+ members)</span>
+        <span class="tag">r/EatCheapAndHealthy (3.5M+ members)</span>
+        <span class="tag">r/recipes (2.5M+ members)</span>
+        <span class="tag">r/MealPlanYourMeals</span>
+        <span class="tag">r/1200isplenty</span>
+        <span class="tag">r/budgetfood</span>
+      </div>
+
+      <h4>Launch Execution</h4>
+      <ul>
+        <li>Tell a story: why you built the app, what problem it solves</li>
+        <li>Include screenshots and a demo video</li>
+        <li>Offer a <strong>Reddit-exclusive promo code</strong> or extended free trial</li>
+        <li>Post in only 1–2 most relevant subreddits (not a shotgun blast)</li>
+        <li>Respond to every comment promptly</li>
+        <li>One developer got 100 installs in 3 days using Reddit alone</li>
+      </ul>
+
+      <h3>Twitter/X Launch Strategies</h3>
+      <ul>
+        <li><strong>Build in public</strong> — share development progress, design decisions, user testing insights months before launch</li>
+        <li>Video content gets <strong>10× engagement</strong> versus text-only posts</li>
+        <li>Engage with the indie developer / #buildinpublic community</li>
+        <li>Largest demographic: 25–34 age group, followed by 18–24 — ideal for tech-savvy food enthusiasts</li>
+        <li>Pre-launch engagement can generate ~5,000 email subscriptions from Twitter alone</li>
+        <li>Post during peak audience hours (use X Analytics to identify)</li>
+      </ul>
+
+      <h3>Building a Waitlist Pre-Launch</h3>
+      <div class="callout callout-green">
+        <span class="callout-title">Target: 5,000–10,000 signups before launch</span>
+        Tools: LaunchList, Waitlister, Prefinery, QueueForm (all offer viral referral mechanics)
+      </div>
+      <ul>
+        <li>Create a landing page with a clear value proposition and email signup</li>
+        <li>Implement <strong>viral referral mechanics</strong>: users see their position in line and jump spots by referring friends</li>
+        <li>Email sequence: welcome message → value email → progress update → feedback survey → pre-launch countdown</li>
+        <li>Offer early access or lifetime discount for waitlist members</li>
+        <li>Share progress on social media and in relevant communities</li>
+        <li><strong>Real-world benchmark:</strong> Robinhood generated 1M waitlist users pre-launch; SparkToro built 18,000 pre-launch emails</li>
+      </ul>
+
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: INFLUENCERS ===== -->
+  <div class="section s6" id="s6">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-header-left">
+        <div class="section-number">06</div>
+        <div>
+          <div class="section-title-text">Influencer Partnerships in the Food Space</div>
+          <div class="section-meta">Tiers &amp; cost ranges · Deal structure · Campaign economics · Examples</div>
+        </div>
+      </div>
+      <svg class="chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+    </div>
+    <div class="section-body">
+
+      <h3>Types of Food Influencers and Cost Ranges</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Tier</th>
+              <th>Followers</th>
+              <th>Cost Per Post</th>
+              <th>Best For</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Nano</strong></td><td>1K–10K</td><td>$10–$100 (or free product)</td><td>Authentic UGC, local reach, high engagement</td></tr>
+            <tr><td><strong>Micro</strong></td><td>10K–50K</td><td>$100–$500</td><td>Best ROI; 60% higher engagement than macro</td></tr>
+            <tr><td><strong>Mid-Tier</strong></td><td>50K–250K</td><td>$500–$2,500</td><td>Balance of reach and authenticity</td></tr>
+            <tr><td><strong>Macro</strong></td><td>250K–1M</td><td>$2,500–$10,000</td><td>Brand awareness, campaign anchors</td></tr>
+            <tr><td><strong>Mega / Celebrity</strong></td><td>1M+</td><td>$10,000–$50,000+</td><td>Mass reach, PR value</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Platform-Specific Rates (2025)</h4>
+      <ul>
+        <li>Instagram Reels: $1,000–$50,000+ (highest demand format)</li>
+        <li>Instagram Feed Posts: $500–$30,000</li>
+        <li>Instagram Stories: $300–$10,000</li>
+        <li>TikTok videos: Generally 20–30% less than Instagram equivalents</li>
+      </ul>
+
+      <div class="callout callout-teal">
+        <span class="callout-title">Recommended: Hybrid Payment Model</span>
+        Base fee of $250 for content creation + $100 bonus for hitting engagement targets (clicks, saves, conversions). 54% of brands now use retainer models, which cost 40–60% less per post than one-off deals.
+      </div>
+
+      <h3>How to Structure Partnerships for App Downloads</h3>
+      <ul>
+        <li><strong>Include a trackable deep link</strong> (Branch, Adjust, or AppsFlyer) so you can attribute installs to specific creators</li>
+        <li><strong>Offer a creator-specific promo code</strong> for extended free trial</li>
+        <li><strong>Require a clear CTA</strong> in the video: "Link in bio to download"</li>
+        <li><strong>Content format that works:</strong> Creator uses the app on camera to plan their week's meals, then cooks one recipe — shows real usage</li>
+        <li><strong>Usage rights:</strong> Negotiate rights to repurpose influencer content as paid ads (UGC-style ads get <strong>20% lower CPI</strong> than studio-produced ads)</li>
+      </ul>
+
+      <h3>Campaign Economics</h3>
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <span class="stat-value">67%</span>
+          <span class="stat-label">Higher engagement for food content vs. other industries</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value">11×</span>
+          <span class="stat-label">Better ROI vs. paid ads from influencer campaigns</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value">37%</span>
+          <span class="stat-label">Higher LTV from influencer-acquired users</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value">7×</span>
+          <span class="stat-label">More cost-effective: micro vs. macro influencers</span>
+        </div>
+      </div>
+
+      <div class="callout callout-blue">
+        <span class="callout-title">Budget Recommendation</span>
+        Allocate $5,000–$15,000 for a launch influencer campaign targeting 10–20 micro-influencers + 2–3 mid-tier creators.
+      </div>
+
+      <h3>Examples of Successful Campaigns</h3>
+      <ul>
+        <li><strong>Bibigo</strong> partnered with macro influencers driving 29.9M impressions and 1.6M total engagements for their food product launch</li>
+        <li><strong>inBeat Agency</strong> connected an organic snack brand with health-focused micro-influencers on Instagram and TikTok, driving thousands of new followers and significant sales within months</li>
+        <li><strong>Whisk (now Samsung Food)</strong> used a comprehensive influencer and lifecycle marketing campaign that tripled the company's size in 6 months, leading to Samsung's acquisition</li>
+      </ul>
+
+    </div>
+  </div>
+
+  <!-- ===== SECTION 7: PR ===== -->
+  <div class="section s7" id="s7">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-header-left">
+        <div class="section-number">07</div>
+        <div>
+          <div class="section-title-text">PR Strategies</div>
+          <div class="section-meta">Tech press · Food media · Press kit · PR timing</div>
+        </div>
+      </div>
+      <svg class="chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+    </div>
+    <div class="section-body">
+
+      <h3>Tech Press Outreach</h3>
+      <h4>Target Publications</h4>
+      <ul>
+        <li><strong>Tier 1:</strong> TechCrunch, The Verge, Wired, Engadget, Ars Technica</li>
+        <li><strong>Tier 2:</strong> 9to5Mac, MacRumors, iMore, Lifehacker, Mashable</li>
+        <li><strong>Tier 3:</strong> Product Hunt (doubles as press), App Store review sites, indie dev blogs</li>
+      </ul>
+
+      <div class="callout callout-purple">
+        <span class="callout-title">Key Stat</span>
+        49% of journalists say their ideal pitch contains a unique story angle or point of view (2025 State of the Media Report).
+      </div>
+
+      <h4>Approach</h4>
+      <ul>
+        <li>Start building relationships <strong>2–3 months before launch</strong> — engage with journalists covering your space (e.g., Sarah Perez at TechCrunch covers apps extensively)</li>
+        <li>Offer <strong>embargoed briefings</strong> 2 weeks before launch — gives reporters time for thoughtful coverage</li>
+        <li>57% of journalists want exclusives from PR contacts — offer a <strong>Tier 1 exclusive</strong> to one top publication</li>
+        <li>Pitch the STORY, not the product: "Why AI is changing how families eat" not "New recipe app launches"</li>
+      </ul>
+
+      <h3>Food Media Outreach</h3>
+      <h4>Target Food Publications</h4>
+      <ul>
+        <li>Bon Appétit, Food52, Eater, Serious Eats, The Kitchn, Epicurious</li>
+        <li>Food sections of NYT, Washington Post, Today Show</li>
+        <li>Food podcasts and YouTube channels</li>
+      </ul>
+
+      <div class="callout callout-orange">
+        <span class="callout-title">Food Media Landscape Note (2025–2026)</span>
+        The food media landscape is shifting — Food52 filed for Chapter 11 in December 2025, America's Test Kitchen acquired it. Eater relaunched its app. These publications are actively looking for food-tech stories.
+      </div>
+
+      <h3>Press Kit Best Practices</h3>
+      <p>Your press kit should include:</p>
+      <ul>
+        <li><strong>One-paragraph description:</strong> What it does, who it's for, why it matters</li>
+        <li><strong>Specs sheet:</strong> Pricing, availability dates, platform requirements, key differentiators</li>
+        <li><strong>Founder story:</strong> Brief, compelling background (especially if food-related)</li>
+        <li><strong>High-res screenshots and app icon</strong> (multiple sizes)</li>
+        <li><strong>App preview video</strong> (30–60 seconds)</li>
+        <li><strong>Key stats or beta results</strong> (if available): "Beta users saved an average of $X/week on groceries"</li>
+        <li><strong>Press-ready quotes</strong> from the founder</li>
+        <li><strong>Download link</strong> (TestFlight or direct App Store link)</li>
+      </ul>
+
+      <h3>PR Timing</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Timeline</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>T–6 weeks</strong></td><td>Press kit finalized and hosted on website</td></tr>
+            <tr><td><strong>T–4 weeks</strong></td><td>Begin outreach to journalists you've built relationships with</td></tr>
+            <tr><td><strong>T–2 weeks</strong></td><td>Embargoed briefings with select journalists</td></tr>
+            <tr><td><strong>T–1 week</strong></td><td>Confirm embargo lift date; send final press kit to broader list</td></tr>
+            <tr><td><strong>Launch Day</strong></td><td>Embargo lifts; broad press release via wire service (optional)</td></tr>
+            <tr><td><strong>T+1 week</strong></td><td>Follow-up with journalists who expressed interest but didn't publish</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== SECTION 8: PRODUCT HUNT ===== -->
+  <div class="section s8" id="s8">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-header-left">
+        <div class="section-number">08</div>
+        <div>
+          <div class="section-title-text">Product Hunt Launch</div>
+          <div class="section-meta">Best practices · 2025 algorithm change · Conversion reality</div>
+        </div>
+      </div>
+      <svg class="chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+    </div>
+    <div class="section-body">
+
+      <div class="callout callout-red">
+        <span class="callout-title">Critical 2025 Change</span>
+        Only 10% of launches now get Featured status (since September 2024 algorithm change). Featured status is the single determining factor for success.
+      </div>
+
+      <h3>Pre-Launch Preparation</h3>
+      <ul>
+        <li>Become an active, contributing member <strong>weeks or months</strong> in advance</li>
+        <li>Upvote and comment on other products to build credibility</li>
+        <li>Get to know other makers who can support your launch</li>
+      </ul>
+
+      <h3>Launch Day Execution</h3>
+      <ul>
+        <li>Launch at <strong>12:01 AM PT</strong> — focus on the first four hours</li>
+        <li>Prepare a <strong>maker's comment</strong> that explains what the product does, why it exists, and invites engagement</li>
+        <li><strong>Do NOT ask for upvotes.</strong> Ask for thoughtful feedback and comments — PH's algorithm rewards engagement quality</li>
+        <li>Respond to every comment quickly</li>
+        <li>Have 10–20 supporters ready to leave genuine, detailed comments early</li>
+      </ul>
+
+      <h3>Visual Assets</h3>
+      <ul>
+        <li>Gallery images must communicate the product's purpose without reading text</li>
+        <li>Demo videos: authentic screen recordings with founder narration outperform polished agency videos</li>
+      </ul>
+
+      <h3>Conversion Reality</h3>
+      <div class="stat-grid">
+        <div class="stat-card">
+          <span class="stat-value">1–3%</span>
+          <span class="stat-label">Product Hunt → App Store conversion rate</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value">3K–10K</span>
+          <span class="stat-label">Website visits on launch day from a top-5 daily finish</span>
+        </div>
+      </div>
+
+      <p>Product Hunt is <strong>top-of-funnel awareness</strong>, not a user acquisition channel. The real value: backlinks for SEO, press attention, social proof ("Featured on Product Hunt" badge), and inbound interest from investors/partners.</p>
+
+    </div>
+  </div>
+
+  <!-- ===== SECTION 9: CROSS-PROMOTION ===== -->
+  <div class="section s9" id="s9">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-header-left">
+        <div class="section-number">09</div>
+        <div>
+          <div class="section-title-text">Cross-Promotion Tactics</div>
+          <div class="section-meta">Apple Search Ads strategy · Partner apps · Cross-promo networks</div>
+        </div>
+      </div>
+      <svg class="chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+    </div>
+    <div class="section-body">
+
+      <h3>Apple Search Ads Strategy</h3>
+
+      <h4>Budget Recommendations</h4>
+      <ul>
+        <li><strong>Starter budget:</strong> $1,000–$3,000/month for keyword discovery and brand defense</li>
+        <li><strong>Growth budget:</strong> $5,000–$15,000/month for competitive keywords + discovery campaigns</li>
+        <li><strong>Aggressive launch budget:</strong> $20,000–$50,000 concentrated in the first 2 weeks</li>
+      </ul>
+
+      <h4>Key Benchmarks (2025)</h4>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Metric</th><th>Value</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Global Median CPI (search results)</td><td><strong>$1.80</strong></td></tr>
+            <tr><td>US Market CPI</td><td><strong>$4.06</strong></td></tr>
+            <tr><td>US CPT (cost per tap)</td><td><strong>$1.91</strong></td></tr>
+            <tr><td>Food &amp; Drink conversion rate</td><td><strong>70.7%</strong> (one of the highest categories)</td></tr>
+            <tr><td>Global TTR (tap-through rate)</td><td><strong>7.4%</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Strategy</h4>
+      <ul>
+        <li><strong>Brand defense:</strong> Bid on your own brand name (cheap, high conversion)</li>
+        <li><strong>Competitor conquest:</strong> Bid on competitor app names (Yummly, Tasty, Mealime)</li>
+        <li><strong>Category keywords:</strong> "meal planner," "recipe app," "cooking app"</li>
+        <li><strong>Discovery campaigns:</strong> Let Apple's algorithm find relevant users</li>
+        <li>Use <strong>Custom Product Pages (CPPs)</strong> for different keyword intents — these now appear in organic search too</li>
+        <li>Multi-placement advertising (search results + Today tab + product page ads) creates synergy and improves conversion</li>
+      </ul>
+
+      <h3>Cross-Promotion with Complementary Apps</h3>
+
+      <h4>Partner Categories</h4>
+      <ul>
+        <li>Fitness/workout apps (pair meal planning with exercise)</li>
+        <li>Grocery delivery apps (integrate ordering)</li>
+        <li>Kitchen timer/cooking tool apps</li>
+        <li>Health tracking apps (MyFitnessPal-style integration)</li>
+        <li>Smart home apps (smart oven/appliance integration)</li>
+      </ul>
+
+      <h4>Tactics</h4>
+      <ul>
+        <li>In-app banners recommending partner apps</li>
+        <li>Shared referral programs</li>
+        <li>Co-marketing email campaigns</li>
+        <li>Shared content creation (e.g., "Your workout + matching meal plan")</li>
+      </ul>
+
+      <h3>Cross-Promotion Networks</h3>
+      <ul>
+        <li>Apple's own "You Might Also Like" section (influenced by category and user behavior)</li>
+        <li>Chartboost, AdMob, Unity Ads for in-app cross-promotion</li>
+        <li>Direct partnership swaps with non-competitive apps in the health/lifestyle space</li>
+      </ul>
+
+    </div>
+  </div>
+
+  <!-- ===== SECTION 10: CASE STUDIES ===== -->
+  <div class="section s10" id="s10">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-header-left">
+        <div class="section-number">10</div>
+        <div>
+          <div class="section-title-text">Real Case Studies</div>
+          <div class="section-meta">Yummly · Whisk / Samsung Food · Mealime · SuperCook · Market trends</div>
+        </div>
+      </div>
+      <svg class="chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+    </div>
+    <div class="section-body">
+
+      <h3>Yummly (Recipe Search &amp; Personalization)</h3>
+      <p><em>Founded 2009, launched 2010. Acquired by Whirlpool in 2017.</em></p>
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <span class="stat-value">30.1K</span>
+          <span class="stat-label">Downloads/month (US App Store)</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value">$85.3K</span>
+          <span class="stat-label">Revenue/month (US App Store)</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value">#107</span>
+          <span class="stat-label">Rank in Food &amp; Drink</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value">#1</span>
+          <span class="stat-label">Keyword ranking for "recipes"</span>
+        </div>
+      </div>
+
+      <h4>What They Do Right</h4>
+      <ul>
+        <li>#1 ranking for the keyword "recipes" — the single most valuable keyword in the category</li>
+        <li>Title "Yummly Recipes &amp; Cooking Tools" effectively combines brand + keywords</li>
+        <li>Strong personalization engine (dietary restrictions, preferences) drives retention</li>
+        <li>Revenue peaked at $110K/month in January 2021 (New Year resolution spike)</li>
+        <li>80.4K Instagram, 310K Facebook, 483K Pinterest followers (10M+ monthly Pinterest viewers)</li>
+        <li>Traffic is primarily organic search</li>
+      </ul>
+
+      <h4>What They Do Wrong (and You Can Exploit)</h4>
+      <ul>
+        <li>Words "tools" and "more" in their metadata waste valuable character space</li>
+        <li>No app preview video despite food being inherently visual</li>
+        <li>Screenshot backgrounds reduce UI contrast and readability</li>
+        <li>No clear CTA on final screenshots</li>
+        <li>Analysis suggests they could nearly double revenue with better ASO optimization</li>
+      </ul>
+
+      <h3>Whisk (now Samsung Food)</h3>
+      <p><em>Founded by Nick Holzherr. Raised $2M seed funding (2013–2014). Acquired by Samsung in 2019.</em></p>
+      <ul>
+        <li>Brand repositioning tripled company size in <strong>6 months</strong></li>
+        <li>In the 12 months before acquisition: team grew from 14 to 32, tripled revenue, became profitable</li>
+        <li>Powered <strong>500M+ recipe interactions</strong> per month</li>
+        <li>Tracked 100M+ user interaction points per month</li>
+        <li><strong>Key strategy:</strong> Focused on becoming the infrastructure layer for recipes (API for other apps/websites) rather than just a consumer app — this created a flywheel of content and users</li>
+      </ul>
+
+      <h3>Mealime (Meal Planning)</h3>
+      <p><em>Founded 2013, Vancouver. Bootstrapped (no external funding).</em></p>
+      <div class="stat-grid">
+        <div class="stat-card">
+          <span class="stat-value">4.5M</span>
+          <span class="stat-label">Total customers</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value">$768K</span>
+          <span class="stat-label">Revenue in 2020 (self-reported)</span>
+        </div>
+      </div>
+      <p>Grew primarily through organic App Store optimization and word-of-mouth. No documented paid acquisition campaigns. Strong ASO and a freemium model with premium meal plans drove sustainable growth. Part of the top 5 companies holding 48% market share in meal planning apps.</p>
+
+      <h3>SuperCook (Ingredient-Based Recipe Search)</h3>
+      <p><em>Founded 2009. 10M+ users.</em></p>
+      <ul>
+        <li>51.14% of traffic comes from organic search, 41.49% from direct traffic</li>
+        <li>Grew primarily through SEO and the unique value proposition of "cook with what you already have"</li>
+        <li>Funded through advertisements on the platform</li>
+        <li>Featured in NYT, The Guardian, Forbes</li>
+      </ul>
+
+      <h3>Market Context: 2024–2025 Trends</h3>
+      <div class="stat-grid">
+        <div class="stat-card">
+          <span class="stat-value">42%</span>
+          <span class="stat-label">Of leading apps now include AI/ML features</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value">47%</span>
+          <span class="stat-label">Meal planning app adoption jump in 2025</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value">$2.45B</span>
+          <span class="stat-label">Market size in 2025</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value">$2.71B</span>
+          <span class="stat-label">Projected market size 2026</span>
+        </div>
+      </div>
+      <div class="callout callout-green">
+        <span class="callout-title">Market Opportunity</span>
+        PlateJoy (longtime meal planning favorite) discontinued service July 1, 2025 — creating a vacuum. Key differentiation vectors for new entrants: AI recipe generation, ingredient scanning, smart grocery integration, personalized nutrition.
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== SECTION 11: MONETIZATION ===== -->
+  <div class="section s11" id="s11">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-header-left">
+        <div class="section-number">11</div>
+        <div>
+          <div class="section-title-text">Free vs. Freemium vs. Paid Launch Strategy</div>
+          <div class="section-meta">Adoption data · Recommended model · Pricing benchmarks · Timeline</div>
+        </div>
+      </div>
+      <svg class="chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+    </div>
+    <div class="section-body">
+
+      <h3>Data on Adoption Speed</h3>
+      <ul>
+        <li><strong>Free apps</strong> account for over 90% of total installs — broadest possible adoption</li>
+        <li><strong>Freemium</strong> excels at viral growth and network effects; ~5% conversion to paid</li>
+        <li><strong>Free trials</strong> convert at ~17% to paid plans (3.4× better than freemium)</li>
+        <li><strong>Hard paywalls</strong> get fewer downloads but higher conversion per user</li>
+        <li><strong>Subscriptions</strong> projected to account for 65% of total app revenue in 2025</li>
+      </ul>
+
+      <h3>Recommended Strategy: Freemium with Early Paywall</h3>
+      <p>Based on RevenueCat's 2025 State of Subscription Apps data:</p>
+      <ol>
+        <li><strong>Launch as freemium</strong> to maximize downloads (critical for ranking algorithm)</li>
+        <li><strong>Show the paywall during onboarding</strong> — 80% of trial starts happen the same day users first open the app</li>
+        <li><strong>Offer a free trial toggle</strong> — letting users choose trial vs. immediate purchase increased install-to-trial conversion by 72% in one case study and delivered 64% revenue uplift</li>
+        <li><strong>Optimal trial length:</strong> 7 days for food apps (enough to experience a full weekly meal planning cycle)</li>
+        <li><strong>Lower price points</strong> convert better: 47.8% trial-to-paid vs 28.4% for higher prices</li>
+        <li><strong>Free tier should include:</strong> Basic recipe browsing, limited meal plans (e.g., 3 recipes/week)</li>
+        <li><strong>Premium tier should include:</strong> Unlimited recipes, full meal planning, grocery lists, nutrition tracking, AI features</li>
+      </ol>
+
+      <h3>Pricing Benchmarks</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Plan Type</th>
+              <th>Price Range</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Weekly</strong></td><td>$2.99–$4.99/week</td><td>Aggressive; common in fitness apps</td></tr>
+            <tr><td><strong>Monthly</strong></td><td>$4.99–$9.99/month</td><td>Most common for food apps</td></tr>
+            <tr><td><strong>Annual</strong></td><td>$29.99–$59.99/year</td><td>Highest LTV; position as "less than $5/month"</td></tr>
+            <tr><td><strong>Lifetime</strong></td><td>$49.99–$99.99</td><td>Good for launch promotions; creates urgency</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Monetization Timeline</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Phase</th>
+              <th>Duration</th>
+              <th>Strategy</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Pre-launch</strong></td><td>3–6 months</td><td>Free beta via TestFlight; gather feedback</td></tr>
+            <tr><td><strong>Launch</strong></td><td>Weeks 1–4</td><td>Freemium with generous free tier; paywall visible but not aggressive</td></tr>
+            <tr><td><strong>Growth</strong></td><td>Months 2–3</td><td>Tighten free tier slightly; optimize paywall based on data</td></tr>
+            <tr><td><strong>Optimization</strong></td><td>Months 3–6</td><td>A/B test pricing, trial lengths, paywall placement; introduce annual plan</td></tr>
+            <tr><td><strong>Maturity</strong></td><td>Month 6+</td><td>Full monetization; may add in-app purchases for recipe packs or premium ingredient lists</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Real Examples</h3>
+      <ul>
+        <li><strong>Mealime:</strong> Launched free with premium upgrade; reached $768K revenue with 4.5M users (freemium model)</li>
+        <li><strong>Yummly:</strong> Free with subscription; revenue climbed from $4K/month to $110K/month over ~1 year</li>
+        <li><strong>Whisk:</strong> Freemium with API monetization (B2B layer); became profitable before Samsung acquisition</li>
+      </ul>
+
+    </div>
+  </div>
+
+  <!-- ===== BUDGET SECTION ===== -->
+  <div class="section s1" id="budget" style="margin-top: 40px;">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-header-left">
+        <div class="section-number" style="background: rgba(248,81,73,0.15); color: var(--accent-red);">$</div>
+        <div>
+          <div class="section-title-text">Consolidated Launch Budget Recommendations</div>
+          <div class="section-meta">Bootstrapped · Growth · Aggressive tiers</div>
+        </div>
+      </div>
+      <svg class="chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+    </div>
+    <div class="section-body">
+
+      <h3>Bootstrapped Launch ($5,000–$15,000)</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Item</th><th>Budget</th></tr></thead>
+          <tbody>
+            <tr><td>Apple Search Ads (first month)</td><td>$2,000–$5,000</td></tr>
+            <tr><td>Micro-influencer partnerships (5–10 creators)</td><td>$1,000–$3,000</td></tr>
+            <tr><td>ASO tools (AppTweak/Appfigures)</td><td>$100–$300</td></tr>
+            <tr><td>Waitlist tool (LaunchList/Waitlister)</td><td>$50–$200</td></tr>
+            <tr><td>Screenshot/preview video design</td><td>$500–$2,000</td></tr>
+            <tr><td>PR/press outreach (DIY)</td><td>$0 (time investment)</td></tr>
+            <tr><td><strong>Total</strong></td><td><strong>$3,650–$10,500</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Growth Launch ($25,000–$75,000)</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Item</th><th>Budget</th></tr></thead>
+          <tbody>
+            <tr><td>Apple Search Ads (first 2 months)</td><td>$10,000–$30,000</td></tr>
+            <tr><td>Influencer campaign (15–25 creators)</td><td>$5,000–$15,000</td></tr>
+            <tr><td>PR agency or freelance publicist</td><td>$3,000–$8,000</td></tr>
+            <tr><td>ASO tools + consultant</td><td>$1,000–$3,000</td></tr>
+            <tr><td>Social media content production</td><td>$2,000–$5,000</td></tr>
+            <tr><td>Waitlist + email marketing tools</td><td>$200–$500</td></tr>
+            <tr><td>Screenshot/video professional design</td><td>$2,000–$5,000</td></tr>
+            <tr><td>Product Hunt preparation</td><td>$500–$1,000</td></tr>
+            <tr><td><strong>Total</strong></td><td><strong>$23,700–$67,500</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Aggressive Launch ($100,000+)</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Item</th><th>Budget</th></tr></thead>
+          <tbody>
+            <tr><td>Apple Search Ads (first 3 months)</td><td>$30,000–$60,000</td></tr>
+            <tr><td>Multi-tier influencer campaign</td><td>$15,000–$40,000</td></tr>
+            <tr><td>PR agency (retained)</td><td>$8,000–$15,000</td></tr>
+            <tr><td>TikTok/Meta paid ads</td><td>$10,000–$25,000</td></tr>
+            <tr><td>Professional video production</td><td>$5,000–$10,000</td></tr>
+            <tr><td>Launch event/activation</td><td>$5,000–$15,000</td></tr>
+            <tr><td>ASO consultancy</td><td>$3,000–$5,000</td></tr>
+            <tr><td>Localization (5+ markets)</td><td>$3,000–$8,000</td></tr>
+            <tr><td><strong>Total</strong></td><td><strong>$79,000–$178,000</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== TAKEAWAYS ===== -->
+  <div style="margin-top: 48px;" id="takeaways">
+    <h2 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 20px; color: var(--text);">The Playbook in Order of Impact</h2>
+    <ul class="takeaway-list">
+      <li>
+        <div class="takeaway-num">1</div>
+        <div><strong>Build an exceptional app first.</strong> Retention now matters more than raw downloads. No amount of marketing fixes a bad product.</div>
+      </li>
+      <li>
+        <div class="takeaway-num">2</div>
+        <div><strong>Nail your ASO before spending a dollar on marketing.</strong> Title, subtitle, keywords, screenshots, and preview video are your highest-leverage activities.</div>
+      </li>
+      <li>
+        <div class="takeaway-num">3</div>
+        <div><strong>Launch in January</strong> (or time a major update for January) to ride the New Year resolution wave in the food/health space.</div>
+      </li>
+      <li>
+        <div class="takeaway-num">4</div>
+        <div><strong>Build a waitlist of 5,000–10,000 people</strong> using viral referral mechanics, building in public on Twitter/X, and engaging in Reddit food communities.</div>
+      </li>
+      <li>
+        <div class="takeaway-num">5</div>
+        <div><strong>Coordinate a burst launch</strong> where all channels fire simultaneously: PR embargo lifts, email blast, influencer posts go live, paid ads activate, Product Hunt launch — all on the same day.</div>
+      </li>
+      <li>
+        <div class="takeaway-num">6</div>
+        <div><strong>Invest in 10–20 micro-influencers</strong> over 1–2 macro influencers. The ROI is dramatically better.</div>
+      </li>
+      <li>
+        <div class="takeaway-num">7</div>
+        <div><strong>Submit for Apple featuring 3 months early</strong> and use SwiftUI, WidgetKit, App Intents, and Live Activities.</div>
+      </li>
+      <li>
+        <div class="takeaway-num">8</div>
+        <div><strong>Show the paywall early</strong> (during onboarding) with a free trial toggle. 80% of trial starts happen on Day 0.</div>
+      </li>
+      <li>
+        <div class="takeaway-num">9</div>
+        <div><strong>Update frequently</strong> (every 2–3 weeks) to signal freshness to the algorithm and provide reasons for re-featuring.</div>
+      </li>
+      <li>
+        <div class="takeaway-num">10</div>
+        <div><strong>Localize your App Store page</strong> for at least 5–10 markets to capture 30–40% more international conversions with minimal effort.</div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ===== SOURCES ===== -->
+  <div style="margin-top: 48px; padding-top: 40px; border-top: 1px solid var(--border);">
+    <h2 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 16px; color: var(--text-muted);">Sources</h2>
+    <ul class="sources-list">
+      <li><a href="https://www.apptweak.com/en/aso-blog/app-store-optimization-aso-best-practices" target="_blank" rel="noopener">AppTweak ASO Best Practices</a></li>
+      <li><a href="https://www.apptweak.com/en/aso-blog/apple-ads-benchmarks" target="_blank" rel="noopener">AppTweak Apple Ads Benchmarks 2025</a></li>
+      <li><a href="https://www.apptweak.com/en/aso-blog/app-store-seasonality" target="_blank" rel="noopener">AppTweak App Store Seasonality</a></li>
+      <li><a href="https://www.apptweak.com/en/aso-blog/number-of-downloads-to-reach-top-rankings" target="_blank" rel="noopener">AppTweak Downloads to Reach Top Rankings</a></li>
+      <li><a href="https://splitmetrics.com/blog/apple-app-store-ranking-factors/" target="_blank" rel="noopener">SplitMetrics Apple App Store Ranking Factors 2025</a></li>
+      <li><a href="https://www.mobileaction.co/blog/app-store-ranking-factors/" target="_blank" rel="noopener">MobileAction App Store Ranking Factors 2026</a></li>
+      <li><a href="https://appfigures.com/resources/guides/app-store-algorithm-update-2025" target="_blank" rel="noopener">Appfigures App Store Algorithm Update 2025</a></li>
+      <li><a href="https://appfigures.com/resources/app-teardowns/yummly" target="_blank" rel="noopener">Appfigures Yummly ASO Teardown</a></li>
+      <li><a href="https://appsamurai.com/blog/burst-campaigns-for-mobile-app-marketing/" target="_blank" rel="noopener">AppSamurai Burst Campaigns Guide</a></li>
+      <li><a href="https://developer.apple.com/app-store/getting-featured/" target="_blank" rel="noopener">Apple Developer: Getting Featured</a></li>
+      <li><a href="https://developer.apple.com/app-store/pre-orders/" target="_blank" rel="noopener">Apple Developer: Pre-Orders</a></li>
+      <li><a href="https://developer.apple.com/app-store/ratings-and-reviews/" target="_blank" rel="noopener">Apple Developer: Ratings and Reviews</a></li>
+      <li><a href="https://radaso.com/blog/apple-app-store-featuring-how-to-get-into-the-recommended-apps" target="_blank" rel="noopener">Radaso: How to Get Featured on Apple App Store</a></li>
+      <li><a href="https://www.consultmyapp.com/blog/-app-store-keywords-full-data-amp-analysis-of-7500-apps-across-every-category-in-the-us-app-store-nov-2025" target="_blank" rel="noopener">ConsultMyApp: App Store Keywords Analysis of 7,500 Apps (Nov 2025)</a></li>
+      <li><a href="https://www.revenuecat.com/state-of-subscription-apps-2025/" target="_blank" rel="noopener">RevenueCat State of Subscription Apps 2025</a></li>
+      <li><a href="https://www.revenuecat.com/blog/growth/sosa-2025-launch-sub-club/" target="_blank" rel="noopener">RevenueCat SOSA 2025 Subscription Playbook</a></li>
+      <li><a href="https://www.revenuecat.com/blog/growth/paywall-redesigns-case-studies/" target="_blank" rel="noopener">RevenueCat Paywall Redesigns Case Studies</a></li>
+      <li><a href="https://awesome-directories.com/blog/product-hunt-launch-guide-2025-algorithm-changes/" target="_blank" rel="noopener">Product Hunt Launch Guide 2025</a></li>
+      <li><a href="https://influencity.com/blog/en/influencer-fees-in-the-food-industry-what-brands-should-pay-for" target="_blank" rel="noopener">Influencity: Influencer Fees in the Food Industry</a></li>
+      <li><a href="https://later.com/blog/food-influencer-marketing/" target="_blank" rel="noopener">Later: 2025 Guide to Food &amp; Beverage Influencer Marketing</a></li>
+      <li><a href="https://goatagency.com/blog/food-influencer-marketing-campaigns/" target="_blank" rel="noopener">GOAT Agency: 10 Best Food Influencer Marketing Campaigns 2025</a></li>
+      <li><a href="https://www.mediafa.st/how-to-promote/mobile-app-on-reddit" target="_blank" rel="noopener">MediaFast: How to Promote Your Mobile App on Reddit 2026</a></li>
+      <li><a href="https://www.reddit-radar-marketing.com/blog/reddit-product-launch-strategy" target="_blank" rel="noopener">Reddit Radar: Reddit Product Launch Strategy</a></li>
+      <li><a href="https://fanana.io/articles/app-localization-strategies-global-market-expansion.html" target="_blank" rel="noopener">Fanana: App Localization Strategies</a></li>
+      <li><a href="https://mavrk.studio/food-tiktok-trend-tips/" target="_blank" rel="noopener">Mavrk Studio: TikTok Food Trends 2025</a></li>
+      <li><a href="https://awisee.com/blog/food-and-beverage-tiktok-marketing/" target="_blank" rel="noopener">Awisee: Food and Beverage TikTok Marketing 2025</a></li>
+      <li><a href="https://clickstrike.com/blog/tech-pr-guide/" target="_blank" rel="noopener">Clickstrike: Tech PR Guide</a></li>
+      <li><a href="https://appbot.co/blog/prompting-for-ratings-prompt-early-or-wait/" target="_blank" rel="noopener">Appbot: When to Ask for App Ratings</a></li>
+      <li><a href="https://www.businessofapps.com/marketplace/app-store-optimization/aso-tools/" target="_blank" rel="noopener">Business of Apps: ASO Tools 2026</a></li>
+      <li><a href="https://getlatka.com/companies/mealime" target="_blank" rel="noopener">GetLatka: Mealime Revenue Data</a></li>
+      <li><a href="https://thespoon.tech/the-story-of-samsung-food-with-nick-holzherr/" target="_blank" rel="noopener">The Spoon: Samsung Food / Whisk Story</a></li>
+      <li><a href="https://appradar.com/academy/app-store-keywords-optimization" target="_blank" rel="noopener">App Radar: App Store Keywords Optimization 2025</a></li>
+    </ul>
+  </div>
+
+</div>
+</main>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+  <div class="container">
+    <p>NomFly Launch Playbook &mdash; Comprehensive Intelligence Report 2025–2026</p>
+    <p style="margin-top:6px;">Generated by Peter Kim's AI Orchestrator &mdash; April 3, 2026 &nbsp;|&nbsp; <a href="https://github.com/peterkimpro">github.com/peterkimpro</a></p>
+  </div>
+</footer>
+
+<script>
+  function toggleSection(header) {
+    const section = header.closest('.section');
+    section.classList.toggle('open');
+  }
+
+  let allOpen = false;
+  function toggleAll() {
+    allOpen = !allOpen;
+    document.querySelectorAll('.section').forEach(s => {
+      if (allOpen) s.classList.add('open');
+      else s.classList.remove('open');
+    });
+    document.querySelector('.expand-btn').textContent = allOpen ? 'Collapse All Sections' : 'Expand All Sections';
+  }
+
+  // Highlight active nav link on scroll
+  const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+  const sections = document.querySelectorAll('.section[id], [id="budget"], [id="takeaways"]');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => link.classList.remove('active'));
+        const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-60px 0px -60% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+
+  // Open section when nav link is clicked
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      const targetId = link.getAttribute('href').replace('#', '');
+      const targetSection = document.getElementById(targetId);
+      if (targetSection && targetSection.classList.contains('section')) {
+        targetSection.classList.add('open');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
